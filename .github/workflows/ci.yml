@@ -24,7 +24,7 @@ jobs:
       - name: Lint and type check
         run: |
           source .venv/bin/activate
-          ruff check
+          python -m ruff check
           mypy --strict .
       - name: Run tests
         run: |
