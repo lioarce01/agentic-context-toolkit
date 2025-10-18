@@ -135,6 +135,10 @@ module = [
     "litellm",
     "redis",
     "redis.*",
+    "langchain",
+    "langchain.*",
+    "langchain_core",
+    "langchain_core.*",
 ]
 ignore_missing_imports = true
 

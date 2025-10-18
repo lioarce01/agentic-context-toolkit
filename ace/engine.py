@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import structlog
@@ -174,3 +175,39 @@ class ACEEngine:
         if self.config.reflection_sample_rate >= 1.0:
             return True
         return random.random() < self.config.reflection_sample_rate
+
+    async def ingest_interaction(
+        self,
+        query: str,
+        answer: str,
+        *,
+        evidence: Optional[List[str]] = None,
+        context_deltas: Optional[List[ContextDelta]] = None,
+        ground_truth: Optional[str] = None,
+        update_usage: bool = True,
+    ) -> Dict[str, Any]:
+        """Ingest an externally generated interaction for reflection and curation."""
+        evidence_list = evidence or []
+        deltas = context_deltas or []
+        context_bullets, tokens_used = self.budget_manager.pack_deltas(deltas)
+
+        report = await self.reflector.reflect(
+            query=query,
+            answer=answer,
+            evidence=evidence_list,
+            context=context_bullets,
+            ground_truth=ground_truth,
+        )
+        created_deltas = await self._curate_and_persist(report)
+
+        if update_usage and deltas:
+            for delta in deltas:
+                delta.usage_count += 1
+                delta.updated_at = datetime.utcnow()
+                await self.storage.update_delta(delta)
+
+        return {
+            "report": report,
+            "created_deltas": created_deltas,
+            "context_tokens": tokens_used,
+        }
