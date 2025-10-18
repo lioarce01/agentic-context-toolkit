@@ -6,8 +6,8 @@ from datetime import datetime
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as pkg_version
 
-project = "Agentic Context"
-author = "Agentic Context maintainers"
+project = "Agentic Context Toolkit"
+author = "lioarce01"
 copyright = f"{datetime.utcnow():%Y}, {author}"
 
 try:
