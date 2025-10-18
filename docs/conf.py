@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-import datetime
-from importlib.metadata import PackageNotFoundError, version
+from datetime import datetime
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as pkg_version
 
 project = "Agentic Context"
 author = "Agentic Context maintainers"
-copyright = f"{datetime.datetime.utcnow():%Y}, {author}"
+copyright = f"{datetime.utcnow():%Y}, {author}"
 
 try:
-    release = version("act")
+    release = pkg_version("act")
 except PackageNotFoundError:
     release = "0.1.0"
 version = release

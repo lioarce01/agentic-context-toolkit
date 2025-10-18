@@ -42,7 +42,11 @@ class DeltaRanker:
         for delta in candidates:
             if delta.embedding is None:
                 delta.embedding = await self.embedder.embed(delta.guideline)
-            score = self._compute_score(query_embedding, delta)
+            if delta.embedding is None:
+                # Embedding provider failed; treat as low relevance.
+                score = 0.0
+            else:
+                score = self._compute_score(query_embedding, delta.embedding, delta)
             scored.append((delta, score))
 
         scored.sort(key=lambda item: item[1], reverse=True)
@@ -53,10 +57,11 @@ class DeltaRanker:
     def _compute_score(
         self,
         query_embedding: List[float],
+        delta_embedding: List[float],
         delta: ContextDelta,
     ) -> float:
         """Composite scoring function used for ranking."""
-        similarity = self.embedder.similarity(query_embedding, delta.embedding)
+        similarity = self.embedder.similarity(query_embedding, delta_embedding)
         recency = self._clamp(delta.recency)
         usage = self._usage_term(delta.usage_count)
         risk_penalty = self._risk_penalty(delta.risk_level)

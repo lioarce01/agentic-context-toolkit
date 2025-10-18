@@ -9,19 +9,24 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-try:
-    from pgvector.sqlalchemy import Vector
-except ImportError as exc:  # pragma: no cover - optional dependency
-    Vector = None
-    PGVECTOR_IMPORT_ERROR = exc
-else:
-    PGVECTOR_IMPORT_ERROR = None
-
 from ace.core.interfaces import StorageBackend
 from ace.core.models import ContextDelta, DeltaStatus
 
+Vector: Any | None
+PGVECTOR_IMPORT_ERROR: ImportError | None
 
-class Base(DeclarativeBase):
+try:
+    from pgvector.sqlalchemy import Vector as PGVector
+except ImportError as exc:  # pragma: no cover - optional dependency
+    PGVECTOR_IMPORT_ERROR = exc
+    PGVector = None
+else:
+    PGVECTOR_IMPORT_ERROR = None
+
+Vector = PGVector
+
+
+class Base(DeclarativeBase):  # type: ignore[misc]
     pass
 
 
@@ -129,7 +134,8 @@ class PostgresBackend(StorageBackend):
             )
             result = await session.execute(stmt)
             await session.commit()
-            return result.rowcount or 0
+            activated_ids = result.scalars().all()
+            return len(activated_ids)
 
     def _to_record(self, delta: ContextDelta) -> DeltaRecord:
         data = delta.model_dump()

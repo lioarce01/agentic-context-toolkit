@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional
+import importlib
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 from ace.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
-    from anthropic import AsyncAnthropic
+    anthropic_module: Any | None = importlib.import_module("anthropic")
 except ImportError as exc:  # pragma: no cover - optional dependency
-    AsyncAnthropic = None  # type: ignore[assignment]
-    ANTHROPIC_IMPORT_ERROR = exc
+    ANTHROPIC_IMPORT_ERROR: ImportError | None = exc
+    anthropic_module = None
 else:
     ANTHROPIC_IMPORT_ERROR = None
 
@@ -24,13 +25,14 @@ class AnthropicProvider(BaseLLMProvider):
         api_key: Optional[str] = None,
         **default_kwargs: Dict[str, object],
     ) -> None:
-        if AsyncAnthropic is None:
+        if anthropic_module is None:
             raise ImportError(
                 "anthropic is required for AnthropicProvider. Install with `pip install anthropic`."
             ) from ANTHROPIC_IMPORT_ERROR
 
         self._model = model
-        self._client = AsyncAnthropic(api_key=api_key)
+        client_cls = cast(type[Any], anthropic_module.AsyncAnthropic)
+        self._client: Any = client_cls(api_key=api_key)
         self._default_kwargs = default_kwargs
 
     async def complete(
@@ -48,14 +50,21 @@ class AnthropicProvider(BaseLLMProvider):
             **params,
         )
 
-        usage = response.usage or {}
+        usage = getattr(response, "usage", None)
         usage_dict = {
-            "prompt_tokens": usage.input_tokens or 0,
-            "completion_tokens": usage.output_tokens or 0,
-            "total_tokens": (usage.input_tokens or 0) + (usage.output_tokens or 0),
+            "prompt_tokens": getattr(usage, "input_tokens", 0) or 0,
+            "completion_tokens": getattr(usage, "output_tokens", 0) or 0,
+            "total_tokens": (
+                (getattr(usage, "input_tokens", 0) or 0)
+                + (getattr(usage, "output_tokens", 0) or 0)
+            ),
         }
 
-        content = response.content[0].text if response.content else ""
+        content_items = getattr(response, "content", []) or []
+        content = ""
+        if content_items:
+            first_item = content_items[0]
+            content = getattr(first_item, "text", "") or ""
 
         return LLMResponse(
             content=content,
@@ -72,9 +81,9 @@ class AnthropicProvider(BaseLLMProvider):
         return self._model
 
     @staticmethod
-    def _separate_system(messages: List[Message]):
-        system = None
-        converted = []
+    def _separate_system(messages: List[Message]) -> Tuple[Optional[str], List[Dict[str, str]]]:
+        system: Optional[str] = None
+        converted: List[Dict[str, str]] = []
         for message in messages:
             if message.role == "system" and system is None:
                 system = message.content

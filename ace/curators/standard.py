@@ -33,17 +33,17 @@ class StandardCurator(Curator):
     ) -> List[ContextDelta]:
         curated: List[ContextDelta] = []
         for insight in report.proposed_insights:
-            confidence = insight.get("confidence", 0.0)
+            confidence = insight.confidence
             if confidence < self.min_confidence:
                 logger.debug("Skipping low-confidence insight", confidence=confidence)
                 continue
 
             candidate = ContextDelta(
-                topic=insight.get("topic", "unspecified"),
-                guideline=insight.get("guideline", ""),
-                conditions=list(insight.get("conditions", [])),
-                evidence=list(insight.get("evidence", [])),
-                tags=list(insight.get("tags", [])),
+                topic=insight.topic,
+                guideline=insight.guideline,
+                conditions=list(insight.conditions),
+                evidence=list(insight.evidence),
+                tags=list(insight.tags),
                 confidence=confidence,
                 status=DeltaStatus.STAGED,
             )

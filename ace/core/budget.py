@@ -2,15 +2,19 @@
 
 from __future__ import annotations
 
-from typing import List, Optional, Tuple
-
-try:
-    import tiktoken
-except ImportError as exc:
-    raise ImportError("tiktoken is required for TokenBudgetManager; install with `pip install tiktoken`." ) from exc
-from tiktoken.core import Encoding
+import importlib
+from typing import Any, List, Optional, Tuple
 
 from .models import ContextDelta
+
+try:
+    tiktoken_module = importlib.import_module("tiktoken")
+except ImportError as exc:
+    raise ImportError(
+        "tiktoken is required for TokenBudgetManager; install with `pip install tiktoken`."
+    ) from exc
+
+Encoding = Any
 
 
 class TokenBudgetManager:
@@ -31,12 +35,12 @@ class TokenBudgetManager:
         """Return a tokenizer encoding compatible with the given model."""
         try:
             if model:
-                return tiktoken.encoding_for_model(model)
+                return tiktoken_module.encoding_for_model(model)
         except KeyError:
             pass
 
         # Default to a widely supported encoding when no specific model is supplied.
-        return tiktoken.get_encoding("cl100k_base")
+        return tiktoken_module.get_encoding("cl100k_base")
 
     def count_tokens(self, text: str) -> int:
         """Count tokens consumed by the given text."""

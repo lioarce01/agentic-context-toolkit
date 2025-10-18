@@ -2,27 +2,30 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, AsyncIterator, Dict, Iterable, List, Optional
+import importlib
+from typing import TYPE_CHECKING, Any, AsyncIterator, Dict, Iterable, List, Optional, cast
 
 from ace.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
-    from openai import AsyncOpenAI
+    openai_module: Any | None = importlib.import_module("openai")
 except ImportError as exc:  # pragma: no cover - optional dependency
-    AsyncOpenAI = None  # type: ignore[assignment]
-    OPENAI_IMPORT_ERROR = exc
+    OPENAI_IMPORT_ERROR: ImportError | None = exc
+    openai_module = None
 else:
     OPENAI_IMPORT_ERROR = None
 
 try:  # pragma: no cover - optional dependency
-    import tiktoken
+    tiktoken_module: Any | None = importlib.import_module("tiktoken")
 except ImportError:  # pragma: no cover - optional dependency
-    tiktoken = None  # type: ignore[assignment]
+    tiktoken_module = None
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    from tiktoken.core import Encoding
-else:
-    Encoding = Any  # type: ignore[misc,assignment]
+    from openai import AsyncOpenAI as OpenAIClient
+    from tiktoken.core import Encoding as TiktokenEncoding
+else:  # pragma: no cover - runtime fallback
+    OpenAIClient = Any
+    TiktokenEncoding = Any
 
 
 class OpenAIProvider(BaseLLMProvider):
@@ -35,24 +38,26 @@ class OpenAIProvider(BaseLLMProvider):
         base_url: Optional[str] = None,
         **default_kwargs: Any,
     ) -> None:
-        if AsyncOpenAI is None:
+        if openai_module is None:
             raise ImportError(
                 "openai is required for OpenAIProvider. Install with `pip install openai`."
             ) from OPENAI_IMPORT_ERROR
 
         self._model = model
-        self._client = AsyncOpenAI(api_key=api_key, base_url=base_url)
+        client_cls = cast(type[OpenAIClient], openai_module.AsyncOpenAI)
+        self._client: OpenAIClient = client_cls(api_key=api_key, base_url=base_url)
         self._default_kwargs = default_kwargs
-        self._encoder: Optional[Encoding] = self._resolve_encoder(model)
+        self._encoder: Optional[TiktokenEncoding] = self._resolve_encoder(model)
 
     async def complete(
         self,
         messages: List[Message],
         **kwargs: Any,
     ) -> LLMResponse:
+        payload: List[Dict[str, Any]] = [message.model_dump() for message in messages]
         completion: Any = await self._client.chat.completions.create(
             model=self._model,
-            messages=[message.model_dump() for message in messages],
+            messages=cast(Any, payload),
             **{**self._default_kwargs, **kwargs},
         )
 
@@ -69,17 +74,22 @@ class OpenAIProvider(BaseLLMProvider):
         messages: List[Message],
         **kwargs: Any,
     ) -> AsyncIterator[str]:
-        stream: AsyncIterator[Any] = await self._client.chat.completions.create(
+        payload: List[Dict[str, Any]] = [message.model_dump() for message in messages]
+        response = await self._client.chat.completions.create(
             model=self._model,
-            messages=[message.model_dump() for message in messages],
+            messages=cast(Any, payload),
             stream=True,
             **{**self._default_kwargs, **kwargs},
         )
 
-        async for chunk in stream:
-            delta = self._first_choice(chunk).delta
-            for token in self._extract_delta_tokens(delta):
-                yield token
+        async def iterator() -> AsyncIterator[str]:
+            stream = cast(AsyncIterator[Any], response)
+            async for chunk in stream:
+                delta = self._first_choice(chunk).delta
+                for token in self._extract_delta_tokens(delta):
+                    yield token
+
+        return iterator()
 
     def count_tokens(self, text: str) -> int:
         if self._encoder is None:
@@ -133,10 +143,10 @@ class OpenAIProvider(BaseLLMProvider):
         ]
 
     @staticmethod
-    def _resolve_encoder(model: str) -> Optional[Encoding]:
-        if tiktoken is None:
+    def _resolve_encoder(model: str) -> Optional[TiktokenEncoding]:
+        if tiktoken_module is None:
             return None
         try:
-            return tiktoken.encoding_for_model(model)
+            return tiktoken_module.encoding_for_model(model)
         except KeyError:
-            return tiktoken.get_encoding("cl100k_base")
+            return tiktoken_module.get_encoding("cl100k_base")

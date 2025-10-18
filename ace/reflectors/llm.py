@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from ace.core.interfaces import Reflector
 from ace.core.models import ReflectionReport
@@ -94,8 +94,14 @@ class LLMReflector(Reflector):
 
     @staticmethod
     def _parse_json(content: str) -> Dict[str, Any]:
+        def _load_json(candidate: str) -> Dict[str, Any]:
+            data = json.loads(candidate)
+            if not isinstance(data, dict):
+                raise ValueError("Reflector response must be a JSON object.")
+            return cast(Dict[str, Any], data)
+
         try:
-            return json.loads(content)
+            return _load_json(content)
         except json.JSONDecodeError:
             if "```" in content:
                 parts = content.split("```")
@@ -104,7 +110,7 @@ class LLMReflector(Reflector):
                     if part.startswith("json"):
                         part = part[4:].strip()
                     try:
-                        return json.loads(part)
+                        return _load_json(part)
                     except json.JSONDecodeError:
                         continue
             raise ValueError("Failed to parse reflector JSON response.") from None

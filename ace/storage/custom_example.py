@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+import importlib
+from typing import Any, List, Optional
 
 try:
-    import redis.asyncio as redis
+    redis_asyncio: Any | None = importlib.import_module("redis.asyncio")
 except ImportError as exc:  # pragma: no cover - optional dependency
-    redis = None
-    REDIS_IMPORT_ERROR = exc
+    redis_asyncio = None
+    REDIS_IMPORT_ERROR: ImportError | None = exc
 else:
     REDIS_IMPORT_ERROR = None
 
@@ -20,11 +21,11 @@ class RedisBackend(StorageBackend):
     """Demonstrates how to extend StorageBackend using Redis."""
 
     def __init__(self, redis_url: str = "redis://localhost:6379") -> None:
-        if redis is None:
+        if redis_asyncio is None:
             raise ImportError(
                 "redis is required for RedisBackend. Install with `pip install redis`."
             ) from REDIS_IMPORT_ERROR
-        self.client = redis.from_url(redis_url, decode_responses=True)
+        self.client = redis_asyncio.from_url(redis_url, decode_responses=True)
         self.prefix = "ace:delta:"
 
     async def save_delta(self, delta: ContextDelta) -> None:

@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
+import importlib
+from typing import Any, Dict, List
 
 from ace.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
-    import litellm
+    litellm_module: Any | None = importlib.import_module("litellm")
 except ImportError as exc:  # pragma: no cover - optional dependency
-    litellm = None
-    LITELLM_IMPORT_ERROR = exc
+    LITELLM_IMPORT_ERROR: ImportError | None = exc
+    litellm_module = None
 else:
     LITELLM_IMPORT_ERROR = None
 
@@ -19,12 +20,13 @@ class LiteLLMProvider(BaseLLMProvider):
     """Universal LLM provider leveraging LiteLLM routing."""
 
     def __init__(self, model: str, **default_kwargs: Dict[str, object]) -> None:
-        if litellm is None:
+        if litellm_module is None:
             raise ImportError(
                 "litellm is required for LiteLLMProvider. Install with `pip install litellm`."
             ) from LITELLM_IMPORT_ERROR
 
         self._model = model
+        self._litellm: Any = litellm_module
         self._default_kwargs = default_kwargs
 
     async def complete(
@@ -34,14 +36,18 @@ class LiteLLMProvider(BaseLLMProvider):
     ) -> LLMResponse:
         payload = [message.model_dump() for message in messages]
         params = {**self._default_kwargs, **kwargs}
-        response = await litellm.acompletion(model=self._model, messages=payload, **params)
+        response = await self._litellm.acompletion(
+            model=self._model,
+            messages=payload,
+            **params,
+        )
 
         choice = response.choices[0]
-        usage = response.usage or {}
+        usage = getattr(response, "usage", None)
         usage_dict = {
-            "prompt_tokens": usage.prompt_tokens or 0,
-            "completion_tokens": usage.completion_tokens or 0,
-            "total_tokens": usage.total_tokens or 0,
+            "prompt_tokens": getattr(usage, "prompt_tokens", 0) or 0,
+            "completion_tokens": getattr(usage, "completion_tokens", 0) or 0,
+            "total_tokens": getattr(usage, "total_tokens", 0) or 0,
         }
 
         return LLMResponse(
@@ -52,7 +58,10 @@ class LiteLLMProvider(BaseLLMProvider):
         )
 
     def count_tokens(self, text: str) -> int:
-        return litellm.token_counter(model=self._model, text=text)
+        counter = getattr(self._litellm, "token_counter", None)
+        if counter is None:
+            return max(1, len(text) // 4)
+        return int(counter(model=self._model, text=text))
 
     @property
     def model_name(self) -> str:
