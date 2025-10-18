@@ -92,6 +92,8 @@ include = '\\.(pyi?)$'
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+
+[tool.ruff.lint]
 select = [
     "E",
     "W",
@@ -103,11 +105,12 @@ select = [
 ]
 ignore = [
     "E501",
-    "B008"
+    "B008",
+    "UP035",
+    "UP045",
+    "UP006"
 ]
-
-[tool.ruff.per-file-ignores]
-"__init__.py" = ["F401"]
+per-file-ignores = {"__init__.py" = ["F401"]}
 
 [tool.mypy]
 python_version = "3.12"

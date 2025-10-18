@@ -3,22 +3,15 @@
 from __future__ import annotations
 
 import datetime
-import importlib.metadata
-import os
-import sys
-from pathlib import Path
+from importlib.metadata import PackageNotFoundError, version
 
-# Ensure project root is on sys.path for autodoc (future use)
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-
-project = "Agentic Context Toolkit"
-author = "Lioarce01"
+project = "Agentic Context"
+author = "Agentic Context maintainers"
 copyright = f"{datetime.datetime.utcnow():%Y}, {author}"
 
 try:
-    release = importlib.metadata.version("act")
-except importlib.metadata.PackageNotFoundError:
+    release = version("act")
+except PackageNotFoundError:
     release = "0.1.0"
 version = release
 
@@ -28,5 +21,7 @@ templates_path = ["_templates"]
 exclude_patterns: list[str] = []
 
 html_theme = "alabaster"
-html_static_path = ["_static"]
+html_static_path: list[str] = []
 
+source_suffix = ".md"
+master_doc = "index"

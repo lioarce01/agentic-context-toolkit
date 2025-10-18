@@ -107,4 +107,4 @@ class LLMReflector(Reflector):
                         return json.loads(part)
                     except json.JSONDecodeError:
                         continue
-            raise ValueError("Failed to parse reflector JSON response.")
+            raise ValueError("Failed to parse reflector JSON response.") from None

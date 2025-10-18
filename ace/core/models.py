@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import List
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -97,7 +97,7 @@ class ContextDelta(BaseModel):
         description="Last modification timestamp (UTC).",
     )
 
-    embedding: Optional[List[float]] = Field(
+    embedding: List[float] | None = Field(
         default=None,
         exclude=True,
         description="Optional cached embedding for retrieval tasks.",
@@ -115,11 +115,11 @@ class ReflectionReport(BaseModel):
     question: str
     answer: str
     evidence_refs: List[str] = Field(default_factory=list)
-    issues: List["ReflectionReport.Issue"] = Field(
+    issues: List[ReflectionReport.Issue] = Field(
         default_factory=list,
         description="Identified issues such as omissions or contradictions.",
     )
-    proposed_insights: List["ReflectionReport.ProposedInsight"] = Field(
+    proposed_insights: List[ReflectionReport.ProposedInsight] = Field(
         default_factory=list,
         description="Candidate deltas proposed by the reflector.",
     )
