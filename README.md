@@ -1,4 +1,4 @@
-[![CI](https://github.com/lioarce01/agentic-context/actions/workflows/ci.yml/badge.svg)](https://github.com/lioarce01/agentic-context/actions/workflows/ci.yml) [![Docs](https://github.com/lioarce01/agentic-context/actions/workflows/docs.yml/badge.svg)](https://github.com/lioarce01/agentic-context/actions/workflows/docs.yml)
+[![CI](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml) [![Docs](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml)
 # Agentic Context
 
 Research-oriented framework for Agentic Context Engineering. It captures, ranks, and reuses "context deltas" from LLM interactions so agents adapt without retraining, following the methodology described in [Contextual Delta Learning for Agentic Systems](https://www.arxiv.org/abs/2510.04618).
