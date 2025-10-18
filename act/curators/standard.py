@@ -6,9 +6,9 @@ from typing import List
 
 import structlog
 
-from ace.core.interfaces import Curator, EmbeddingProvider
-from ace.core.models import ContextDelta, DeltaStatus, ReflectionReport
-from ace.retrieval.dedup import DeltaDeduplicator
+from act.core.interfaces import Curator, EmbeddingProvider
+from act.core.models import ContextDelta, DeltaStatus, ReflectionReport
+from act.retrieval.dedup import DeltaDeduplicator
 
 logger = structlog.get_logger(__name__)
 

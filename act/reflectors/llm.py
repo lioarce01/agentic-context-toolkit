@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional, cast
 
-from ace.core.interfaces import Reflector
-from ace.core.models import ReflectionReport
-from ace.llm.base import BaseLLMProvider, Message
+from act.core.interfaces import Reflector
+from act.core.models import ReflectionReport
+from act.llm.base import BaseLLMProvider, Message
 
 
 class LLMReflector(Reflector):

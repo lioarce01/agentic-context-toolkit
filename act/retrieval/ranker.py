@@ -6,8 +6,8 @@ from __future__ import annotations
 import math
 from typing import List, Optional, Sequence, Tuple
 
-from ace.core.interfaces import EmbeddingProvider
-from ace.core.models import ContextDelta
+from act.core.interfaces import EmbeddingProvider
+from act.core.models import ContextDelta
 
 
 class DeltaRanker:

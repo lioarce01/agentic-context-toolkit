@@ -6,9 +6,9 @@ import asyncio
 from dataclasses import dataclass
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Sequence
 
-from ace.core.models import ContextDelta, DeltaStatus
-from ace.engine import ACEEngine
-from ace.llm.base import BaseLLMProvider, LLMResponse, Message
+from act.core.models import ContextDelta, DeltaStatus
+from act.engine import ACEEngine
+from act.llm.base import BaseLLMProvider, LLMResponse, Message
 
 
 @dataclass(frozen=True)

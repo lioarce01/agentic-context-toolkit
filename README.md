@@ -1,7 +1,7 @@
 [![CI](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml) [![Docs](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml)
-# Agentic Context
+# Agentic Context Toolkit
 
-Research-oriented framework for Agentic Context Engineering. It captures, ranks, and reuses "context deltas" from LLM interactions so agents adapt without retraining, following the methodology described in [Contextual Delta Learning for Agentic Systems](https://www.arxiv.org/abs/2510.04618).
+Research-oriented framework for Agentic Context Engineering. It captures, ranks, and reuses "context deltas" from LLM interactions so agents adapt without retraining, following the methodology described in [Agentic Context Engineering Framework](https://www.arxiv.org/abs/2510.04618).
 
 ## Features
 - LLM provider agnostic (OpenAI, Anthropic, LiteLLM, Ollama, custom wrappers)
@@ -31,7 +31,7 @@ act/
 2. Install dependencies with `pip install -r requirements.txt`.
 3. Run format and lint checks: `black .` and `ruff check`.
 4. Run type checks: `mypy --strict .`.
-5. Run tests: `pytest --cov=ace`.
+5. Run tests: `pytest --cov=act`.
 
 
 

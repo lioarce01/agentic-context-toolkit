@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib
 from typing import Any, Dict, List
 
-from ace.llm.base import BaseLLMProvider, LLMResponse, Message
+from act.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
     litellm_module: Any | None = importlib.import_module("litellm")

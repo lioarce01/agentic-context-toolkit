@@ -1,8 +1,8 @@
-"""Unit tests for ace.core.models."""
+"""Unit tests for act.core.models."""
 
 from datetime import datetime
 
-from ace.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
+from act.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
 
 
 def test_context_delta_defaults_and_mutation() -> None:
@@ -54,4 +54,3 @@ def test_ace_config_weights_sum_within_bounds() -> None:
         + config.risk_penalty_weight
     )
     assert 0.0 < total_weight <= 1.0
-

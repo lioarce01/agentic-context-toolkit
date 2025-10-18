@@ -5,8 +5,8 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Coroutine, Dict, List, Optional, Protocol, Sequence, Type, cast
 
-from ace.core.models import ContextDelta, DeltaStatus
-from ace.engine import ACEEngine
+from act.core.models import ContextDelta, DeltaStatus
+from act.engine import ACEEngine
 
 
 class _BaseMemoryProtocol(Protocol):

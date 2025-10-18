@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib
 from typing import TYPE_CHECKING, Any, AsyncIterator, Dict, Iterable, List, Optional, cast
 
-from ace.llm.base import BaseLLMProvider, LLMResponse, Message
+from act.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
     openai_module: Any | None = importlib.import_module("openai")

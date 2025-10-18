@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from ace.core.budget import TokenBudgetManager
-from ace.core.interfaces import Curator, Generator, Reflector, StorageBackend
-from ace.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
-from ace.retrieval import DeltaRanker
+from act.core.budget import TokenBudgetManager
+from act.core.interfaces import Curator, Generator, Reflector, StorageBackend
+from act.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
+from act.retrieval import DeltaRanker
 
 logger = structlog.get_logger(__name__)
 

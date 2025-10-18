@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from ace.core.interfaces import StorageBackend
-from ace.core.models import ContextDelta, DeltaStatus
+from act.core.interfaces import StorageBackend
+from act.core.models import ContextDelta, DeltaStatus
 
 
 class MemoryBackend(StorageBackend):

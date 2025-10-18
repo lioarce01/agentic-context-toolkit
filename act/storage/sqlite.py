@@ -9,8 +9,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Sequence
 
-from ace.core.interfaces import StorageBackend
-from ace.core.models import ContextDelta, DeltaStatus
+from act.core.interfaces import StorageBackend
+from act.core.models import ContextDelta, DeltaStatus
 
 
 class SQLiteBackend(StorageBackend):

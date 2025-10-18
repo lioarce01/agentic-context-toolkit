@@ -9,8 +9,8 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from ace.core.interfaces import StorageBackend
-from ace.core.models import ContextDelta, DeltaStatus
+from act.core.interfaces import StorageBackend
+from act.core.models import ContextDelta, DeltaStatus
 
 Vector: Any | None
 PGVECTOR_IMPORT_ERROR: ImportError | None
