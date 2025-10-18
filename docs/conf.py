@@ -16,7 +16,7 @@ except PackageNotFoundError:
     release = "0.1.0"
 version = release
 
-extensions: list[str] = []
+extensions = ["myst_parser"]
 
 templates_path = ["_templates"]
 exclude_patterns: list[str] = []

@@ -34,6 +34,7 @@ ruff>=0.7
 black>=24.10
 sphinx>=8.0
 sphinx-rtd-theme>=3.0
+myst-parser>=2.0
 
 # Optional storage integrations
 redis>=5.0
