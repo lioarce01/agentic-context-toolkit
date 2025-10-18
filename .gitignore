@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.env/
+venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Coverage / reports
+.htmlcov/
+.coverage*
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# IDEs / editors
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Documentation builds
+/docs/_build/
+
+# Project planning artifacts
+AGENTS.md
+planning.md
+ace framework.pdf
+
