@@ -22,4 +22,4 @@ The loop repeats continuously, allowing applications to adapt in near real time 
 - **Token-aware** – `TokenBudgetManager` ensures we never overrun prompt windows.
 - **Observability-first** – Structured logging and configurable thresholds make it easy to monitor drift.
 
-For more detail on implementation phases and long-term roadmap, refer to `planning.md` in the repository root.
+For continued progress tracking and future roadmap updates, follow the repository changelog and release notes.
