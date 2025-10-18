@@ -16,10 +16,12 @@ dist/
 
 # Coverage / reports
 .htmlcov/
+htmlcov/
 .coverage*
 .cache/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
 
 # IDEs / editors
 .vscode/

@@ -138,6 +138,10 @@ module = [
 ]
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "ace.storage.postgres"
+disallow_subclassing_any = false
+
 [tool.pytest.ini_options]
 minversion = "8.0"
 asyncio_mode = "auto"
