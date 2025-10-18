@@ -147,6 +147,6 @@ class OpenAIProvider(BaseLLMProvider):
         if tiktoken_module is None:
             return None
         try:
-            return tiktoken_module.encoding_for_model(model)
+            return cast(TiktokenEncoding, tiktoken_module.encoding_for_model(model))
         except KeyError:
-            return tiktoken_module.get_encoding("cl100k_base")
+            return cast(TiktokenEncoding, tiktoken_module.get_encoding("cl100k_base"))

@@ -26,7 +26,7 @@ else:
 Vector = PGVector
 
 
-class Base(DeclarativeBase):  # type: ignore[misc]
+class Base(DeclarativeBase):  # type: ignore[misc]  # SQLAlchemy DeclarativeBase lacks precise typing
     pass
 
 
