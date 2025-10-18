@@ -1,4 +1,4 @@
-# Agentic Context
+# Agentic Context Toolkit
 
 Research-oriented framework for Agentic Context Engineering. It captures, ranks, and reuses "context deltas" from LLM interactions so agents adapt without retraining, following the methodology described in [Contextual Delta Learning for Agentic Systems](https://www.arxiv.org/abs/2510.04618).
 
