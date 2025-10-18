@@ -9,14 +9,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Sequence
 
-from act.core.interfaces import StorageBackend
+from act.core.interfACTs import StorageBackend
 from act.core.models import ContextDelta, DeltaStatus
 
 
 class SQLiteBackend(StorageBackend):
-    """SQLite-based storage backend for ACE context deltas."""
+    """SQLite-based storage backend for ACT context deltas."""
 
-    def __init__(self, db_path: str = "ace_deltas.db") -> None:
+    def __init__(self, db_path: str = "ACT_deltas.db") -> None:
         self.db_path = Path(db_path)
         self._init_db()
 
@@ -62,13 +62,13 @@ class SQLiteBackend(StorageBackend):
 
     async def save_delta(self, delta: ContextDelta) -> None:
         payload = self._serialize_delta(delta)
-        placeholders = ", ".join("?" for _ in payload)
+        plACTholders = ", ".join("?" for _ in payload)
         columns = ", ".join(payload.keys())
         values = list(payload.values())
 
         statement = f"""
             INSERT INTO deltas ({columns})
-            VALUES ({placeholders})
+            VALUES ({plACTholders})
             ON CONFLICT(id) DO UPDATE SET
                 topic=excluded.topic,
                 guideline=excluded.guideline,
@@ -98,11 +98,11 @@ class SQLiteBackend(StorageBackend):
 
         payloads = [self._serialize_delta(delta) for delta in deltas]
         columns = ", ".join(payloads[0].keys())
-        placeholders = ", ".join("?" for _ in payloads[0])
+        plACTholders = ", ".join("?" for _ in payloads[0])
 
         statement = f"""
             INSERT INTO deltas ({columns})
-            VALUES ({placeholders})
+            VALUES ({plACTholders})
             ON CONFLICT(id) DO UPDATE SET
                 topic=excluded.topic,
                 guideline=excluded.guideline,

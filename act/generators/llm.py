@@ -1,4 +1,4 @@
-"""Generator implementations for ACE."""
+"""Generator implementations for ACT."""
 
 from __future__ import annotations
 

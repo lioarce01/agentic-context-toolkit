@@ -1,4 +1,4 @@
-"""ReAct-style agent built on top of ACE."""
+"""ReAct-style agent built on top of ACT."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Sequence
 
 from act.core.models import ContextDelta, DeltaStatus
-from act.engine import ACEEngine
+from act.engine import ACTEngine
 from act.llm.base import BaseLLMProvider, LLMResponse, Message
 
 
@@ -36,7 +36,7 @@ class _ParsedStep:
 
 
 class ReActAgent:
-    """Async ReAct loop that leverages ACE-provided context and tooling."""
+    """Async ReAct loop that leverages ACT-provided context and tooling."""
 
     THOUGHT_PREFIX = "Thought:"
     ACTION_PREFIX = "Action:"
@@ -45,7 +45,7 @@ class ReActAgent:
 
     def __init__(
         self,
-        engine: ACEEngine,
+        engine: ACTEngine,
         llm: BaseLLMProvider,
         tools: Sequence[Tool],
         *,

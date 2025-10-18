@@ -1,9 +1,9 @@
-"""ACE Framework package initialization."""
+"""ACT toolkit package initialization."""
 
 from . import storage
 from .agents import ReActAgent, Tool
 from .core import (
-    ACEConfig,
+    ACTConfig,
     ContextDelta,
     Curator,
     DeltaStatus,
@@ -15,16 +15,16 @@ from .core import (
     TokenBudgetManager,
 )
 from .curators import StandardCurator
-from .engine import ACEEngine
+from .engine import ACTEngine
 from .generators import LLMGenerator
-from .integrations import ACEMemory
+from .integrations import ACTMemory
 from .llm import BaseLLMProvider, LLMResponse, Message
 from .llm.providers import AnthropicProvider, LiteLLMProvider, OpenAIProvider
 from .retrieval import DeltaDeduplicator, DeltaRanker
 
 __all__ = [
     "__version__",
-    "ACEConfig",
+    "ACTConfig",
     "ContextDelta",
     "DeltaStatus",
     "ReflectionReport",
@@ -34,7 +34,7 @@ __all__ = [
     "Generator",
     "Reflector",
     "StorageBackend",
-    "ACEEngine",
+    "ACTEngine",
     "LLMGenerator",
     "BaseLLMProvider",
     "LLMResponse",
@@ -46,7 +46,7 @@ __all__ = [
     "DeltaDeduplicator",
     "StandardCurator",
     "storage",
-    "ACEMemory",
+    "ACTMemory",
     "ReActAgent",
     "Tool",
 ]

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from act.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
+from act.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
 
 
 def test_context_delta_defaults_and_mutation() -> None:
@@ -45,8 +45,8 @@ def test_reflection_report_nested_models() -> None:
     assert report.proposed_insights[0].topic == "follow_up"
 
 
-def test_ace_config_weights_sum_within_bounds() -> None:
-    config = ACEConfig()
+def test_act_config_weights_sum_within_bounds() -> None:
+    config = ACTConfig()
     total_weight = (
         config.similarity_weight
         + config.recency_weight

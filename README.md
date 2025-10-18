@@ -18,8 +18,8 @@ pip install -r requirements.txt
 
 ## Project Layout
 ```
-act/
-  ace/                # Library source (packages added per phase)
+.
+  act/                # Library source (packages added per phase)
   benchmarks/         # Performance and benchmark suites
   docs/               # Documentation site sources
   examples/           # Usage examples and sample apps

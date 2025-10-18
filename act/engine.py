@@ -1,4 +1,4 @@
-"""ACE Engine orchestration."""
+"""ACT engine orchestration."""
 
 from __future__ import annotations
 
@@ -10,13 +10,13 @@ import structlog
 
 from act.core.budget import TokenBudgetManager
 from act.core.interfaces import Curator, Generator, Reflector, StorageBackend
-from act.core.models import ACEConfig, ContextDelta, DeltaStatus, ReflectionReport
+from act.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
 from act.retrieval import DeltaRanker
 
 logger = structlog.get_logger(__name__)
 
 
-class ACEEngine:
+class ACTEngine:
     """Coordinates generator, reflector, curator, and storage workflows."""
 
     def __init__(
@@ -26,14 +26,14 @@ class ACEEngine:
         curator: Curator,
         storage: StorageBackend,
         ranker: DeltaRanker,
-        config: Optional[ACEConfig] = None,
+        config: Optional[ACTConfig] = None,
     ) -> None:
         self.generator = generator
         self.reflector = reflector
         self.curator = curator
         self.storage = storage
         self.ranker = ranker
-        self.config = config or ACEConfig()
+        self.config = config or ACTConfig()
         self.budget_manager = TokenBudgetManager(budget=self.config.token_budget)
 
     async def run_offline_adaptation(

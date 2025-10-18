@@ -1,4 +1,4 @@
-"""Retrieval utilities for the ACE Framework."""
+"""Retrieval utilities for the ACT toolkit."""
 
 from .dedup import DeltaDeduplicator
 from .ranker import DeltaRanker

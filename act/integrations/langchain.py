@@ -1,4 +1,4 @@
-"""LangChain memory integration for ACE."""
+"""LangChain memory integration for ACT."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import asyncio
 from typing import Any, Coroutine, Dict, List, Optional, Protocol, Sequence, Type, cast
 
 from act.core.models import ContextDelta, DeltaStatus
-from act.engine import ACEEngine
+from act.engine import ACTEngine
 
 
 class _BaseMemoryProtocol(Protocol):
@@ -71,12 +71,12 @@ else:
 _BaseMemoryRuntimeType = cast(type, _BaseMemoryRuntime)
 
 
-class ACEMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
-    """LangChain memory wrapper that sources context from the ACE Engine."""
+class ACTMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
+    """LangChain memory wrapper that sources context from the ACT engine."""
 
     def __init__(
         self,
-        engine: ACEEngine,
+        engine: ACTEngine,
         *,
         context_key: str = "ace_context",
         input_keys: Sequence[str] | None = None,
@@ -134,7 +134,7 @@ class ACEMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
         self._run_sync(self.asave_context(inputs, outputs))
 
     async def asave_context(self, inputs: Dict[str, Any], outputs: Dict[str, Any]) -> None:
-        """Ingest interaction results back into ACE."""
+        """Ingest interaction results back into ACT."""
         if not self.update_context:
             self._reset_context()
             return
@@ -203,6 +203,6 @@ class ACEMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
         except RuntimeError:
             return asyncio.run(coro)
         raise RuntimeError(
-            "ACEMemory detected an active event loop; use the async `aload_memory_variables` "
+            "ACTMemory detected an active event loop; use the async `aload_memory_variables` "
             "or `asave_context` methods instead."
         )

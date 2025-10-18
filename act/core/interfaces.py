@@ -1,4 +1,4 @@
-"""Abstract interfaces that define ACE Framework components."""
+"""Abstract interfaces that define ACT toolkit components."""
 
 from __future__ import annotations
 

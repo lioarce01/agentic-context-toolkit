@@ -1,4 +1,4 @@
-"""Pydantic models used throughout the ACE Framework."""
+"""Pydantic models used throughout the ACT toolkit."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class DeltaStatus(str, Enum):
 
 
 class ContextDelta(BaseModel):
-    """Atomic unit of learned context captured by ACE."""
+    """Atomic unit of learned context captured by ACT."""
 
     id: str = Field(
         default_factory=lambda: str(uuid.uuid4()),
@@ -148,8 +148,8 @@ class ReflectionReport(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
-class ACEConfig(BaseModel):
-    """Runtime configuration for the ACE engine."""
+class ACTConfig(BaseModel):
+    """Runtime configuration for the ACT engine."""
 
     token_budget: int = Field(
         default=800,

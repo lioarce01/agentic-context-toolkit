@@ -1,4 +1,4 @@
-"""Storage backend implementations for the ACE Framework."""
+"""Storage backend implementations for the ACT toolkit."""
 
 from .memory import MemoryBackend
 from .postgres import PostgresBackend

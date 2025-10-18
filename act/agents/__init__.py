@@ -1,4 +1,4 @@
-"""Agent implementations built on top of ACE."""
+"""Agent implementations built on top of ACT."""
 
 from .react import ReActAgent, Tool
 
