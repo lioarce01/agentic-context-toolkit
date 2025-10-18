@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Sequence
 
-from act.core.interfACTs import StorageBackend
+from act.core.interfaces import StorageBackend
 from act.core.models import ContextDelta, DeltaStatus
 
 
