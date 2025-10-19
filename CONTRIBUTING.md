@@ -1,4 +1,4 @@
-# Contributing to Agentic Context Systems
+# Contributing to Agentic Context Engineering Toolkit
 
 Thanks for your interest in Agentic Context Systems! This framework is being built iteratively; please coordinate major changes with the maintainers before submitting a pull request.
 
