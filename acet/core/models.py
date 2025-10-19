@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import List
 
@@ -89,11 +89,11 @@ class ContextDelta(BaseModel):
         description="Confidence score associated with the delta.",
     )
     created_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(timezone.utc),
         description="Creation timestamp (UTC).",
     )
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(timezone.utc),
         description="Last modification timestamp (UTC).",
     )
 
@@ -103,10 +103,7 @@ class ContextDelta(BaseModel):
         description="Optional cached embedding for retrieval tasks.",
     )
 
-    model_config = ConfigDict(
-        use_enum_values=True,
-        json_encoders={datetime: lambda value: value.isoformat()},
-    )
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class ReflectionReport(BaseModel):

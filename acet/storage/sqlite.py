@@ -1,13 +1,15 @@
-"""SQLite-backed storage implementation."""
+"""Asynchronous SQLite-backed storage implementation."""
 
 from __future__ import annotations
 
+import asyncio
 import json
-import sqlite3
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Sequence
+from typing import Any, AsyncIterator, Dict, List, Mapping, Optional
+
+import aiosqlite
 
 from acet.core.interfaces import StorageBackend
 from acet.core.models import ContextDelta, DeltaStatus
@@ -18,52 +20,13 @@ class SQLiteBackend(StorageBackend):
 
     def __init__(self, db_path: str = "ACET_deltas.db") -> None:
         self.db_path = Path(db_path)
-        self._init_db()
-
-    def _init_db(self) -> None:
-        with self._connect() as conn:
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS deltas (
-                    id TEXT PRIMARY KEY,
-                    topic TEXT NOT NULL,
-                    guideline TEXT NOT NULL,
-                    conditions TEXT,
-                    evidence TEXT,
-                    tags TEXT,
-                    version INTEGER DEFAULT 1,
-                    status TEXT DEFAULT 'staged',
-                    score REAL DEFAULT 0.0,
-                    recency REAL DEFAULT 1.0,
-                    usage_count INTEGER DEFAULT 0,
-                    helpful_count INTEGER DEFAULT 0,
-                    harmful_count INTEGER DEFAULT 0,
-                    author TEXT,
-                    risk_level TEXT DEFAULT 'low',
-                    confidence REAL DEFAULT 0.0,
-                    created_at TEXT,
-                    updated_at TEXT,
-                    embedding BLOB
-                )
-                """
-            )
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_status ON deltas(status)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_topic ON deltas(topic)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_tags ON deltas(tags)")
-
-    @contextmanager
-    def _connect(self) -> Generator[sqlite3.Connection, None, None]:
-        conn = sqlite3.connect(self.db_path)
-        try:
-            yield conn
-            conn.commit()
-        finally:
-            conn.close()
+        self._init_lock = asyncio.Lock()
+        self._initialized = False
 
     async def save_delta(self, delta: ContextDelta) -> None:
         payload = self._serialize_delta(delta)
-        placeholders = ", ".join("?" for _ in payload)
         columns = ", ".join(payload.keys())
+        placeholders = ", ".join("?" for _ in payload)
         values = list(payload.values())
 
         statement = f"""
@@ -89,8 +52,10 @@ class SQLiteBackend(StorageBackend):
                 updated_at=excluded.updated_at,
                 embedding=excluded.embedding
         """
-        with self._connect() as conn:
-            conn.execute(statement, values)
+
+        async with self._connect() as conn:
+            await conn.execute(statement, values)
+            await conn.commit()
 
     async def save_deltas(self, deltas: List[ContextDelta]) -> None:
         if not deltas:
@@ -99,6 +64,7 @@ class SQLiteBackend(StorageBackend):
         payloads = [self._serialize_delta(delta) for delta in deltas]
         columns = ", ".join(payloads[0].keys())
         placeholders = ", ".join("?" for _ in payloads[0])
+        values = [list(payload.values()) for payload in payloads]
 
         statement = f"""
             INSERT INTO deltas ({columns})
@@ -124,15 +90,14 @@ class SQLiteBackend(StorageBackend):
                 embedding=excluded.embedding
         """
 
-        values = [list(payload.values()) for payload in payloads]
-        with self._connect() as conn:
-            conn.executemany(statement, values)
+        async with self._connect() as conn:
+            await conn.executemany(statement, values)
+            await conn.commit()
 
     async def get_delta(self, delta_id: str) -> Optional[ContextDelta]:
-        with self._connect() as conn:
-            row = conn.execute(
-                "SELECT * FROM deltas WHERE id = ?", (delta_id,)
-            ).fetchone()
+        async with self._connect() as conn:
+            cursor = await conn.execute("SELECT * FROM deltas WHERE id = ?", (delta_id,))
+            row = await cursor.fetchone()
         return self._deserialize_row(row) if row else None
 
     async def query_deltas(
@@ -163,24 +128,79 @@ class SQLiteBackend(StorageBackend):
 
         query = f"SELECT * FROM deltas {where_clause} ORDER BY updated_at DESC {limit_clause}"
 
-        with self._connect() as conn:
-            rows = conn.execute(query, tuple(parameters)).fetchall()
+        async with self._connect() as conn:
+            cursor = await conn.execute(query, tuple(parameters))
+            rows = await cursor.fetchall()
+
         return [self._deserialize_row(row) for row in rows]
 
     async def update_delta(self, delta: ContextDelta) -> None:
         await self.save_delta(delta)
 
     async def delete_delta(self, delta_id: str) -> None:
-        with self._connect() as conn:
-            conn.execute("DELETE FROM deltas WHERE id = ?", (delta_id,))
+        async with self._connect() as conn:
+            await conn.execute("DELETE FROM deltas WHERE id = ?", (delta_id,))
+            await conn.commit()
 
     async def activate_staged(self) -> int:
-        with self._connect() as conn:
-            cursor = conn.execute(
+        async with self._connect() as conn:
+            cursor = await conn.execute(
                 "UPDATE deltas SET status = ? WHERE status = ?",
                 (DeltaStatus.ACTIVE.value, DeltaStatus.STAGED.value),
             )
-            return cursor.rowcount
+            await conn.commit()
+            return cursor.rowcount or 0
+
+    async def _ensure_initialized(self) -> None:
+        if self._initialized:
+            return
+
+        async with self._init_lock:
+            if self._initialized:
+                return
+
+            async with aiosqlite.connect(self.db_path) as conn:
+                await conn.executescript(
+                    """
+                    CREATE TABLE IF NOT EXISTS deltas (
+                        id TEXT PRIMARY KEY,
+                        topic TEXT NOT NULL,
+                        guideline TEXT NOT NULL,
+                        conditions TEXT,
+                        evidence TEXT,
+                        tags TEXT,
+                        version INTEGER DEFAULT 1,
+                        status TEXT DEFAULT 'staged',
+                        score REAL DEFAULT 0.0,
+                        recency REAL DEFAULT 1.0,
+                        usage_count INTEGER DEFAULT 0,
+                        helpful_count INTEGER DEFAULT 0,
+                        harmful_count INTEGER DEFAULT 0,
+                        author TEXT,
+                        risk_level TEXT DEFAULT 'low',
+                        confidence REAL DEFAULT 0.0,
+                        created_at TEXT,
+                        updated_at TEXT,
+                        embedding BLOB
+                    );
+                    CREATE INDEX IF NOT EXISTS idx_status ON deltas(status);
+                    CREATE INDEX IF NOT EXISTS idx_topic ON deltas(topic);
+                    CREATE INDEX IF NOT EXISTS idx_tags ON deltas(tags);
+                    """
+                )
+                await conn.commit()
+
+            self._initialized = True
+
+    @asynccontextmanager
+    async def _connect(self) -> AsyncIterator[aiosqlite.Connection]:
+        await self._ensure_initialized()
+        conn = await aiosqlite.connect(self.db_path)
+        conn.row_factory = aiosqlite.Row
+        try:
+            yield conn
+        finally:
+            await conn.close()
 
     def _serialize_delta(self, delta: ContextDelta) -> Dict[str, Any]:
         data = delta.model_dump()
@@ -192,7 +212,7 @@ class SQLiteBackend(StorageBackend):
             "evidence": json.dumps(data["evidence"]),
             "tags": json.dumps(data["tags"]),
             "version": data["version"],
-            "status": delta.status.value,
+            "status": data["status"],
             "score": data["score"],
             "recency": data["recency"],
             "usage_count": data["usage_count"],
@@ -206,50 +226,28 @@ class SQLiteBackend(StorageBackend):
             "embedding": json.dumps(delta.embedding) if delta.embedding is not None else None,
         }
 
-    def _deserialize_row(self, row: Sequence[Any]) -> ContextDelta:
-        (
-            delta_id,
-            topic,
-            guideline,
-            conditions,
-            evidence,
-            tags,
-            version,
-            status,
-            score,
-            recency,
-            usage_count,
-            helpful_count,
-            harmful_count,
-            author,
-            risk_level,
-            confidence,
-            created_at,
-            updated_at,
-            embedding_json,
-        ) = row
-
+    def _deserialize_row(self, row: Mapping[str, Any]) -> ContextDelta:
+        embedding_json = row["embedding"]
         embedding = json.loads(embedding_json) if embedding_json else None
 
         return ContextDelta(
-            id=delta_id,
-            topic=topic,
-            guideline=guideline,
-            conditions=json.loads(conditions) if conditions else [],
-            evidence=json.loads(evidence) if evidence else [],
-            tags=json.loads(tags) if tags else [],
-            version=version,
-            status=DeltaStatus(status),
-            score=score,
-            recency=recency,
-            usage_count=usage_count,
-            helpful_count=helpful_count,
-            harmful_count=harmful_count,
-            author=author or "reflector",
-            risk_level=risk_level or "low",
-            confidence=confidence,
-            created_at=datetime.fromisoformat(created_at),
-            updated_at=datetime.fromisoformat(updated_at),
+            id=row["id"],
+            topic=row["topic"],
+            guideline=row["guideline"],
+            conditions=json.loads(row["conditions"]) if row["conditions"] else [],
+            evidence=json.loads(row["evidence"]) if row["evidence"] else [],
+            tags=json.loads(row["tags"]) if row["tags"] else [],
+            version=row["version"],
+            status=DeltaStatus(row["status"]),
+            score=row["score"],
+            recency=row["recency"],
+            usage_count=row["usage_count"],
+            helpful_count=row["helpful_count"],
+            harmful_count=row["harmful_count"],
+            author=row["author"] or "reflector",
+            risk_level=row["risk_level"] or "low",
+            confidence=row["confidence"],
+            created_at=datetime.fromisoformat(row["created_at"]),
+            updated_at=datetime.fromisoformat(row["updated_at"]),
             embedding=embedding,
         )
-

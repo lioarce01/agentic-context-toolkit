@@ -1,6 +1,6 @@
 """Unit tests for acet.core.models."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from acet.core.models import ACETConfig, ContextDelta, DeltaStatus, ReflectionReport
 
@@ -17,7 +17,7 @@ def test_context_delta_defaults_and_mutation() -> None:
     # Updating fields should refresh timestamps
     original_updated = delta.updated_at
     delta.usage_count += 1
-    delta.updated_at = datetime.utcnow()
+    delta.updated_at = datetime.now(timezone.utc)
     assert delta.updated_at > original_updated
 
 
