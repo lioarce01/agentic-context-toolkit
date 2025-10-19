@@ -1,4 +1,4 @@
-"""Minimal retrieval-augmented workflow powered by ACT."""
+"""Minimal retrieval-augmented workflow powered by ACET."""
 
 from __future__ import annotations
 
@@ -7,12 +7,12 @@ from typing import Any, List, Optional
 
 import structlog
 
-from act import ACTConfig, ACTEngine, LLMGenerator, StandardCurator
-from act.core.interfaces import EmbeddingProvider, Reflector
-from act.core.models import ReflectionReport
-from act.llm.base import BaseLLMProvider, LLMResponse, Message
-from act.retrieval import DeltaRanker
-from act.storage.memory import MemoryBackend
+from acet import ACETEngine, ACTConfig, LLMGenerator, StandardCurator
+from acet.core.interfaces import EmbeddingProvider, Reflector
+from acet.core.models import ReflectionReport
+from acet.llm.base import BaseLLMProvider, LLMResponse, Message
+from acet.retrieval import DeltaRanker
+from acet.storage.memory import MemoryBackend
 
 
 class EchoProvider(BaseLLMProvider):
@@ -88,7 +88,7 @@ async def main() -> None:
 
     embedding_provider = SimpleEmbeddingProvider()
 
-    engine = ACTEngine(
+    engine = ACETEngine(
         generator=LLMGenerator(EchoProvider()),
         reflector=SimpleReflector(),
         curator=StandardCurator(embedding_provider=embedding_provider),

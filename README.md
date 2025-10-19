@@ -19,7 +19,7 @@ pip install -r requirements.txt
 ## Project Layout
 ```
 .
-  act/                # Library source (packages added per phase)
+  acet/               # Library source (packages added per phase)
   benchmarks/         # Performance and benchmark suites
   docs/               # Documentation site sources
   examples/           # Usage examples and sample apps
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 2. Install dependencies with `pip install -r requirements.txt`.
 3. Run format and lint checks: `black .` and `ruff check`.
 4. Run type checks: `mypy --strict .`.
-5. Run tests: `pytest --cov=act`.
+5. Run tests: `pytest --cov=acet`.
 
 
 

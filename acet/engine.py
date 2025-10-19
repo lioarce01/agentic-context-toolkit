@@ -1,4 +1,4 @@
-"""ACT engine orchestration."""
+"""ACET engine orchestration."""
 
 from __future__ import annotations
 
@@ -8,15 +8,15 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from act.core.budget import TokenBudgetManager
-from act.core.interfaces import Curator, Generator, Reflector, StorageBackend
-from act.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
-from act.retrieval import DeltaRanker
+from acet.core.budget import TokenBudgetManager
+from acet.core.interfaces import Curator, Generator, Reflector, StorageBackend
+from acet.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
+from acet.retrieval import DeltaRanker
 
 logger = structlog.get_logger(__name__)
 
 
-class ACTEngine:
+class ACETEngine:
     """Coordinates generator, reflector, curator, and storage workflows."""
 
     def __init__(

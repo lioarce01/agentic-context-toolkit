@@ -17,13 +17,13 @@ ACT requires Python 3.12+, and ships with strict linting/type-checking tools. Th
 ```python
 import asyncio
 
-from act import (
+from acet import (
     ACTConfig,
-    ACTEngine,
+    ACETEngine,
     LLMGenerator,
 )
-from act.llm.base import BaseLLMProvider, LLMResponse, Message
-from act.storage.memory import MemoryBackend
+from acet.llm.base import BaseLLMProvider, LLMResponse, Message
+from acet.storage.memory import MemoryBackend
 
 
 class EchoProvider(BaseLLMProvider):
@@ -44,12 +44,12 @@ class EchoProvider(BaseLLMProvider):
 async def main() -> None:
     generator = LLMGenerator(EchoProvider())
     storage = MemoryBackend()
-    engine = ACTEngine(
+    engine = ACETEngine(
         generator=generator,
-        reflector=...,  # supply an act.reflectors implementation
-        curator=...,    # supply an act.curators implementation
+        reflector=...,  # supply an acet.reflectors implementation
+        curator=...,    # supply an acet.curators implementation
         storage=storage,
-        ranker=...,     # supply an act.retrieval.DeltaRanker
+        ranker=...,     # supply an acet.retrieval.DeltaRanker
         config=ACTConfig(),
     )
 
@@ -62,8 +62,8 @@ asyncio.run(main())
 
 The example above uses the `MemoryBackend` and a toy `EchoProvider`. In a real deployment you would:
 
-- Configure an actual LLM provider (`act.llm.providers.OpenAIProvider`, `LiteLLMProvider`, etc.).
-- Choose a persistent backend (`act.storage.sqlite.SQLiteBackend`, `act.storage.postgres.PostgresBackend`).
+- Configure an actual LLM provider (`acet.llm.providers.OpenAIProvider`, `LiteLLMProvider`, etc.).
+- Choose a persistent backend (`acet.storage.sqlite.SQLiteBackend`, `acet.storage.postgres.PostgresBackend`).
 - Wire up the standard curator, reflector, and ranker components described in the Guides.
 
 See {doc}`../examples/index` for complete runnable scripts.

@@ -13,8 +13,8 @@ except ImportError as exc:  # pragma: no cover - optional dependency
 else:
     REDIS_IMPORT_ERROR = None
 
-from act.core.interfaces import StorageBackend
-from act.core.models import ContextDelta, DeltaStatus
+from acet.core.interfaces import StorageBackend
+from acet.core.models import ContextDelta, DeltaStatus
 
 
 class RedisBackend(StorageBackend):

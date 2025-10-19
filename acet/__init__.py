@@ -1,4 +1,4 @@
-"""ACT toolkit package initialization."""
+"""ACET toolkit package initialization."""
 
 from . import storage
 from .agents import ReActAgent, Tool
@@ -15,7 +15,7 @@ from .core import (
     TokenBudgetManager,
 )
 from .curators import StandardCurator
-from .engine import ACTEngine
+from .engine import ACETEngine
 from .generators import LLMGenerator
 from .integrations import ACTMemory
 from .llm import BaseLLMProvider, LLMResponse, Message
@@ -34,7 +34,7 @@ __all__ = [
     "Generator",
     "Reflector",
     "StorageBackend",
-    "ACTEngine",
+    "ACETEngine",
     "LLMGenerator",
     "BaseLLMProvider",
     "LLMResponse",

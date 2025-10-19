@@ -1,8 +1,8 @@
-"""Unit tests for act.core.models."""
+"""Unit tests for acet.core.models."""
 
 from datetime import datetime
 
-from act.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
+from acet.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
 
 
 def test_context_delta_defaults_and_mutation() -> None:

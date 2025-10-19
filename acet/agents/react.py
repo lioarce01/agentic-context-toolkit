@@ -1,4 +1,4 @@
-"""ReAct-style agent built on top of ACT."""
+"""ReAct-style agent built on top of ACET."""
 
 from __future__ import annotations
 
@@ -6,9 +6,9 @@ import asyncio
 from dataclasses import dataclass
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Sequence
 
-from act.core.models import ContextDelta, DeltaStatus
-from act.engine import ACTEngine
-from act.llm.base import BaseLLMProvider, LLMResponse, Message
+from acet.core.models import ContextDelta, DeltaStatus
+from acet.engine import ACETEngine
+from acet.llm.base import BaseLLMProvider, LLMResponse, Message
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ class ReActAgent:
 
     def __init__(
         self,
-        engine: ACTEngine,
+        engine: ACETEngine,
         llm: BaseLLMProvider,
         tools: Sequence[Tool],
         *,

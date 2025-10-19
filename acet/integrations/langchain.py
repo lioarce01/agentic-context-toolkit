@@ -5,8 +5,8 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Coroutine, Dict, List, Optional, Protocol, Sequence, Type, cast
 
-from act.core.models import ContextDelta, DeltaStatus
-from act.engine import ACTEngine
+from acet.core.models import ContextDelta, DeltaStatus
+from acet.engine import ACETEngine
 
 
 class _BaseMemoryProtocol(Protocol):
@@ -76,7 +76,7 @@ class ACTMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
 
     def __init__(
         self,
-        engine: ACTEngine,
+        engine: ACETEngine,
         *,
         context_key: str = "ace_context",
         input_keys: Sequence[str] | None = None,

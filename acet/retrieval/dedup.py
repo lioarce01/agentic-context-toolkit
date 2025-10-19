@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Tuple
 
-from act.core.interfaces import EmbeddingProvider
-from act.core.models import ContextDelta
+from acet.core.interfaces import EmbeddingProvider
+from acet.core.models import ContextDelta
 
 
 class DeltaDeduplicator:

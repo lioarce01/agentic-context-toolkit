@@ -1,7 +1,7 @@
-"""Unit tests for act.core.budget."""
+"""Unit tests for acet.core.budget."""
 
-from act.core.budget import TokenBudgetManager
-from act.core.models import ContextDelta
+from acet.core.budget import TokenBudgetManager
+from acet.core.models import ContextDelta
 
 
 def build_delta(guideline: str) -> ContextDelta:

@@ -1,6 +1,6 @@
 # Research Summary
 
-ACT implements the **Agentic Context Engineering** approach described in the accompanying research paper. The high-level goals:
+ACET implements the **Agentic Context Engineering** approach described in the accompanying research paper. The high-level goals:
 
 - Capture reusable context deltas (insights, heuristics, policies) from LLM interactions.
 - Score and rank deltas based on similarity, recency, usage, and risk.

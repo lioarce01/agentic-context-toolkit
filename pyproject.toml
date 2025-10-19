@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "acet"
-version = "1.0.0"
+version = "1.0.1"
 description = "Agentic Context Toolkit: context delta learning for adaptive LLM agents"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -143,7 +143,7 @@ module = [
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = "act.storage.postgres"
+module = "acet.storage.postgres"
 disallow_subclassing_any = false
 
 [tool.pytest.ini_options]
@@ -152,14 +152,14 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = [
-    "--cov=act",
+    "--cov=acet",
     "--cov-report=term-missing",
     "--cov-report=html",
     "--strict-markers"
 ]
 
 [tool.coverage.run]
-source = ["act"]
+source = ["acet"]
 omit = ["tests/*", "examples/*"]
 
 [tool.coverage.report]

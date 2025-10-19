@@ -1,4 +1,4 @@
-"""Route between multiple LLM providers while sharing a single ACT pipeline."""
+"""Route between multiple LLM providers while sharing a single ACET pipeline."""
 
 from __future__ import annotations
 
@@ -8,13 +8,13 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from act import ACTConfig, ACTEngine, LLMGenerator, StandardCurator
-from act.core.interfaces import EmbeddingProvider, Reflector
-from act.core.models import ReflectionReport
-from act.llm.base import BaseLLMProvider, LLMResponse, Message
-from act.llm.providers import AnthropicProvider, LiteLLMProvider, OpenAIProvider
-from act.retrieval import DeltaRanker
-from act.storage.memory import MemoryBackend
+from acet import ACETEngine, ACTConfig, LLMGenerator, StandardCurator
+from acet.core.interfaces import EmbeddingProvider, Reflector
+from acet.core.models import ReflectionReport
+from acet.llm.base import BaseLLMProvider, LLMResponse, Message
+from acet.llm.providers import AnthropicProvider, LiteLLMProvider, OpenAIProvider
+from acet.retrieval import DeltaRanker
+from acet.storage.memory import MemoryBackend
 
 
 class LengthEmbeddingProvider(EmbeddingProvider):
@@ -85,9 +85,9 @@ def maybe_litellm() -> BaseLLMProvider:
     return EchoProvider("litellm")
 
 
-def build_engine(provider: BaseLLMProvider) -> ACTEngine:
+def build_engine(provider: BaseLLMProvider) -> ACETEngine:
     embedding_provider = LengthEmbeddingProvider()
-    return ACTEngine(
+    return ACETEngine(
         generator=LLMGenerator(provider),
         reflector=NoOpReflector(),
         curator=StandardCurator(embedding_provider=embedding_provider),

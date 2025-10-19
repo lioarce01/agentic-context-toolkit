@@ -1,6 +1,6 @@
-# Agentic Context Toolkit
+# Agentic Context Engineering Toolkit
 
-Welcome to the official documentation for the Agentic Context Toolkit (ACT).  
+Welcome to the official documentation for the Agentic Context Engineering Toolkit (ACET).  
 ACT helps LLM applications capture, curate, and reuse high-signal context from user interactions—no model retraining required.
 
 ```{toctree}

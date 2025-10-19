@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional, cast
 
-from act.core.interfaces import Reflector
-from act.core.models import ReflectionReport
-from act.llm.base import BaseLLMProvider, Message
+from acet.core.interfaces import Reflector
+from acet.core.models import ReflectionReport
+from acet.llm.base import BaseLLMProvider, Message
 
 
 class LLMReflector(Reflector):

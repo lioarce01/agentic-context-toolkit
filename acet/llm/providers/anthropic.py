@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib
 from typing import Any, Dict, List, Optional, Tuple, cast
 
-from act.llm.base import BaseLLMProvider, LLMResponse, Message
+from acet.llm.base import BaseLLMProvider, LLMResponse, Message
 
 try:  # pragma: no cover - optional dependency
     anthropic_module: Any | None = importlib.import_module("anthropic")

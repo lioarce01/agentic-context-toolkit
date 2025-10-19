@@ -7,7 +7,7 @@ ACT is modular by design. You can swap LLM providers, storage backends, embeddin
 `ACTConfig` centralises all knobs that affect token budgets, batching, ranking, and reflection behaviour.
 
 ```python
-from act.core.models import ACTConfig
+from acet.core.models import ACTConfig
 
 config = ACTConfig(
     token_budget=800,
@@ -30,10 +30,10 @@ Key fields:
 
 ## Token Budget Management
 
-Use `act.core.budget.TokenBudgetManager` to understand how many deltas fit into a model-specific context window.
+Use `acet.core.budget.TokenBudgetManager` to understand how many deltas fit into a model-specific context window.
 
 ```python
-from act.core.budget import TokenBudgetManager
+from acet.core.budget import TokenBudgetManager
 
 manager = TokenBudgetManager(model="gpt-4o", budget=1200)
 bullets, tokens_used = manager.pack_deltas(deltas)
@@ -47,18 +47,18 @@ ACT ships with three built-in implementations of `StorageBackend`:
 
 | Backend | Module | When to use |
 | --- | --- | --- |
-| In-memory | `act.storage.memory.MemoryBackend` | Fast local experiments; resets on restart. |
-| SQLite | `act.storage.sqlite.SQLiteBackend` | Zero-config persistence on a single machine. |
-| Postgres + pgvector | `act.storage.postgres.PostgresBackend` | Production deployments that need horizontal scale and vector search. |
+| In-memory | `acet.storage.memory.MemoryBackend` | Fast local experiments; resets on restart. |
+| SQLite | `acet.storage.sqlite.SQLiteBackend` | Zero-config persistence on a single machine. |
+| Postgres + pgvector | `acet.storage.postgres.PostgresBackend` | Production deployments that need horizontal scale and vector search. |
 
 Choose a backend that matches your deployment constraints. All backends expose the same async CRUD interface.
 
 ## Embeddings and Ranking
 
-`act.retrieval.DeltaRanker` combines semantic similarity with usage, recency, and risk signals. To plug-in a custom embedding strategy, implement `act.core.interfaces.EmbeddingProvider`:
+`acet.retrieval.DeltaRanker` combines semantic similarity with usage, recency, and risk signals. To plug-in a custom embedding strategy, implement `acet.core.interfaces.EmbeddingProvider`:
 
 ```python
-from act.core.interfaces import EmbeddingProvider
+from acet.core.interfaces import EmbeddingProvider
 
 class SentenceTransformerProvider(EmbeddingProvider):
     def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
@@ -77,7 +77,7 @@ class SentenceTransformerProvider(EmbeddingProvider):
 Once an embedding provider exists you can initialise the ranker:
 
 ```python
-from act.retrieval import DeltaRanker
+from acet.retrieval import DeltaRanker
 
 ranker = DeltaRanker(embedding_provider=SentenceTransformerProvider())
 ```

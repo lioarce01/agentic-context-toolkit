@@ -11,7 +11,7 @@ author = "lioarce01"
 copyright = f"{datetime.utcnow():%Y}, {author}"
 
 try:
-    release = pkg_version("act")
+    release = pkg_version("acet")
 except PackageNotFoundError:
     release = "0.1.0"
 version = release

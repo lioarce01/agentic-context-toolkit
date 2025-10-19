@@ -6,9 +6,9 @@ This section summarises the primary modules in the Agentic Context Toolkit. Refe
 
 | Module | Description |
 | --- | --- |
-| `act.core.models` | Data structures such as `ContextDelta`, `ReflectionReport`, and `ACTConfig`. |
-| `act.core.interfaces` | Abstract base classes for generators, reflectors, curators, storage backends, and embedding providers. |
-| `act.core.budget` | `TokenBudgetManager` for counting tokens and packing deltas. |
+| `acet.core.models` | Data structures such as `ContextDelta`, `ReflectionReport`, and `ACTConfig`. |
+| `acet.core.interfaces` | Abstract base classes for generators, reflectors, curators, storage backends, and embedding providers. |
+| `acet.core.budget` | `TokenBudgetManager` for counting tokens and packing deltas. |
 
 ### `ContextDelta`
 
@@ -32,33 +32,33 @@ Represents a single actionable insight. Deltas flow through the lifecycle `STAGE
 
 | Object | Description |
 | --- | --- |
-| `act.engine.ACTEngine` | Orchestrates generator → reflector → curator → storage → ranker. |
-| `ACTEngine.run_offline_adaptation(...)` | Bulk-train from labelled transcripts. |
-| `ACTEngine.run_online_adaptation(...)` | Handle a single live request. |
-| `ACTEngine.ingest_interaction(...)` | Persist an externally generated interaction (useful for LangChain memory). |
+| `acet.engine.ACETEngine` | Orchestrates generator → reflector → curator → storage → ranker. |
+| `ACETEngine.run_offline_adaptation(...)` | Bulk-train from labelled transcripts. |
+| `ACETEngine.run_online_adaptation(...)` | Handle a single live request. |
+| `ACETEngine.ingest_interaction(...)` | Persist an externally generated interaction (useful for LangChain memory). |
 
 ## Retrieval & Ranking
 
 | Module | Description |
 | --- | --- |
-| `act.retrieval.ranker.DeltaRanker` | Combines embeddings, recency, usage, and risk. |
-| `act.retrieval.dedup.DeltaDeduplicator` | Detect and merge near-duplicate deltas. |
+| `acet.retrieval.ranker.DeltaRanker` | Combines embeddings, recency, usage, and risk. |
+| `acet.retrieval.dedup.DeltaDeduplicator` | Detect and merge near-duplicate deltas. |
 
 ## Storage
 
-All storage backends implement `act.core.interfaces.StorageBackend`:
+All storage backends implement `acet.core.interfaces.StorageBackend`:
 
-- `act.storage.memory.MemoryBackend`
-- `act.storage.sqlite.SQLiteBackend`
-- `act.storage.postgres.PostgresBackend`
+- `acet.storage.memory.MemoryBackend`
+- `acet.storage.sqlite.SQLiteBackend`
+- `acet.storage.postgres.PostgresBackend`
 
 ## LLM Providers
 
-`act.llm.base.BaseLLMProvider` defines the required interface. Built-in implementations include:
+`acet.llm.base.BaseLLMProvider` defines the required interface. Built-in implementations include:
 
-- `act.llm.providers.OpenAIProvider`
-- `act.llm.providers.AnthropicProvider`
-- `act.llm.providers.LiteLLMProvider`
+- `acet.llm.providers.OpenAIProvider`
+- `acet.llm.providers.AnthropicProvider`
+- `acet.llm.providers.LiteLLMProvider`
 
 Each provider records model usage metadata and exposes `count_tokens` for budgeting.
 
@@ -66,13 +66,13 @@ Each provider records model usage metadata and exposes `count_tokens` for budget
 
 | Module | Description |
 | --- | --- |
-| `act.generators.llm.LLMGenerator` | Injects context bullets into a system prompt and calls the chosen LLM provider. |
-| `act.reflectors.llm` | Implements JSON-mode reflection loops (placeholder until fully implemented). |
-| `act.curators.standard.StandardCurator` | Scores candidate deltas, deduplicates them, and stages accepted ones. |
+| `acet.generators.llm.LLMGenerator` | Injects context bullets into a system prompt and calls the chosen LLM provider. |
+| `acet.reflectors.llm` | Implements JSON-mode reflection loops (placeholder until fully implemented). |
+| `acet.curators.standard.StandardCurator` | Scores candidate deltas, deduplicates them, and stages accepted ones. |
 
 ## Integrations & Agents
 
-- `act.integrations.ACTMemory` – LangChain-compatible memory component.  
-- `act.agents.react.ReActAgent` – Async ReAct loop with tool support.  
+- `acet.integrations.ACTMemory` – LangChain-compatible memory component.  
+- `acet.agents.react.ReActAgent` – Async ReAct loop with tool support.  
 
 See {doc}`../guides/integrations` for usage guidance.

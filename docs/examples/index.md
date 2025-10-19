@@ -1,6 +1,6 @@
 # Examples
 
-Hands-on recipes that demonstrate common ACT deployment scenarios.
+Hands-on recipes that demonstrate common ACET deployment scenarios.
 
 ## Simple RAG Pipeline
 

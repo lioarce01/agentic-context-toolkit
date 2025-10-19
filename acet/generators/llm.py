@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from act.core.budget import TokenBudgetManager
-from act.core.interfaces import Generator
-from act.llm.base import BaseLLMProvider, Message
+from acet.core.budget import TokenBudgetManager
+from acet.core.interfaces import Generator
+from acet.llm.base import BaseLLMProvider, Message
 
 
 class LLMGenerator(Generator):
