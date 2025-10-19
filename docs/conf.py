@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as pkg_version
 
 project = "Agentic Context Toolkit"
 author = "lioarce01"
-copyright = f"{datetime.now(timezone.utc):%Y}, {author}"
+copyright = f"{datetime.now(UTC):%Y}, {author}"
 
 try:
     release = pkg_version("acet")

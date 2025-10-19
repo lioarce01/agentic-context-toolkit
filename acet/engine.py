@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import random
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional
 
 import structlog
@@ -203,7 +203,7 @@ class ACETEngine:
         if update_usage and deltas:
             for delta in deltas:
                 delta.usage_count += 1
-                delta.updated_at = datetime.now(timezone.utc)
+                delta.updated_at = datetime.now(UTC)
                 await self.storage.update_delta(delta)
 
         return {

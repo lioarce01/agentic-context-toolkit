@@ -147,7 +147,7 @@ class PostgresBackend(StorageBackend):
             evidence=data["evidence"],
             tags=data["tags"],
             version=data["version"],
-            status=delta.status.value,
+            status=getattr(delta.status, "value", delta.status),
             score=data["score"],
             recency=data["recency"],
             usage_count=data["usage_count"],
@@ -158,7 +158,7 @@ class PostgresBackend(StorageBackend):
             confidence=data["confidence"],
             created_at=delta.created_at,
             updated_at=delta.updated_at,
-            embedding=data["embedding"],
+            embedding=delta.embedding,
         )
 
     def _from_record(self, record: DeltaRecord) -> ContextDelta:

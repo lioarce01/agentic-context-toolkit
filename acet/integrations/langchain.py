@@ -9,7 +9,7 @@ from acet.core.models import ContextDelta, DeltaStatus
 from acet.engine import ACETEngine
 
 
-class _BaseMemoryProtocol(Protocol):
+class _BaseMemoryProtocol(Protocol):  # pragma: no cover - structural typing
     @property
     def memory_variables(self) -> List[str]:
         ...
@@ -44,7 +44,7 @@ if isinstance(_LangChainBaseMemory, type):  # pragma: no cover - runtime detecti
     )
 else:
 
-    class _FallbackBaseMemory:
+    class _FallbackBaseMemory:  # pragma: no cover - fallback stub
         """Fallback base class used when LangChain is unavailable."""
 
         @property

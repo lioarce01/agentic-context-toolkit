@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import List, Optional, Tuple
 
 from acet.core.interfaces import EmbeddingProvider
@@ -67,6 +67,6 @@ class DeltaDeduplicator:
             existing.confidence = max(0.0, min(1.0, confidence))
 
         existing.version += 1
-        existing.updated_at = datetime.now(timezone.utc)
+        existing.updated_at = datetime.now(UTC)
 
         return existing
