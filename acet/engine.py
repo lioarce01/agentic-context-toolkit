@@ -10,7 +10,7 @@ import structlog
 
 from acet.core.budget import TokenBudgetManager
 from acet.core.interfaces import Curator, Generator, Reflector, StorageBackend
-from acet.core.models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
+from acet.core.models import ACETConfig, ContextDelta, DeltaStatus, ReflectionReport
 from acet.retrieval import DeltaRanker
 
 logger = structlog.get_logger(__name__)
@@ -26,14 +26,14 @@ class ACETEngine:
         curator: Curator,
         storage: StorageBackend,
         ranker: DeltaRanker,
-        config: Optional[ACTConfig] = None,
+        config: Optional[ACETConfig] = None,
     ) -> None:
         self.generator = generator
         self.reflector = reflector
         self.curator = curator
         self.storage = storage
         self.ranker = ranker
-        self.config = config or ACTConfig()
+        self.config = config or ACETConfig()
         self.budget_manager = TokenBudgetManager(budget=self.config.token_budget)
 
     async def run_offline_adaptation(

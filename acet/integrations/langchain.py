@@ -1,4 +1,4 @@
-"""LangChain memory integration for ACT."""
+"""LangChain memory integration for ACET."""
 
 from __future__ import annotations
 
@@ -71,8 +71,8 @@ else:
 _BaseMemoryRuntimeType = cast(type, _BaseMemoryRuntime)
 
 
-class ACTMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
-    """LangChain memory wrapper that sources context from the ACT engine."""
+class ACETMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
+    """LangChain memory wrapper that sources context from the ACET engine."""
 
     def __init__(
         self,
@@ -134,7 +134,7 @@ class ACTMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
         self._run_sync(self.asave_context(inputs, outputs))
 
     async def asave_context(self, inputs: Dict[str, Any], outputs: Dict[str, Any]) -> None:
-        """Ingest interaction results back into ACT."""
+        """Ingest interaction results back into ACET."""
         if not self.update_context:
             self._reset_context()
             return
@@ -203,6 +203,8 @@ class ACTMemory(_BaseMemoryRuntimeType):  # type: ignore[misc, valid-type]
         except RuntimeError:
             return asyncio.run(coro)
         raise RuntimeError(
-            "ACTMemory detected an active event loop; use the async `aload_memory_variables` "
+            "ACETMemory detected an active event loop; use the async `aload_memory_variables` "
             "or `asave_context` methods instead."
         )
+
+

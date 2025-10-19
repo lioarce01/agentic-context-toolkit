@@ -7,7 +7,7 @@ from typing import Any, List, Optional
 
 import structlog
 
-from acet import ACETEngine, ACTConfig, LLMGenerator, StandardCurator
+from acet import ACETConfig, ACETEngine, LLMGenerator, StandardCurator
 from acet.core.interfaces import EmbeddingProvider, Reflector
 from acet.core.models import ReflectionReport
 from acet.llm.base import BaseLLMProvider, LLMResponse, Message
@@ -94,7 +94,7 @@ async def main() -> None:
         curator=StandardCurator(embedding_provider=embedding_provider),
         storage=MemoryBackend(),
         ranker=DeltaRanker(embedding_provider),
-        config=ACTConfig(token_budget=400, reflection_sample_rate=1.0),
+        config=ACETConfig(token_budget=400, reflection_sample_rate=1.0),
     )
 
     # Offline bootstrapping

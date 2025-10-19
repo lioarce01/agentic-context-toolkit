@@ -1,4 +1,4 @@
-"""Generator implementations for ACT."""
+"""Generator implementations for ACET."""
 
 from __future__ import annotations
 
@@ -56,3 +56,4 @@ class LLMGenerator(Generator):
             Message(role="system", content=system_content),
             Message(role="user", content=query),
         ]
+

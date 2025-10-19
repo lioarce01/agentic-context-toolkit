@@ -6,7 +6,7 @@ This section summarises the primary modules in the Agentic Context Toolkit. Refe
 
 | Module | Description |
 | --- | --- |
-| `acet.core.models` | Data structures such as `ContextDelta`, `ReflectionReport`, and `ACTConfig`. |
+| `acet.core.models` | Data structures such as `ContextDelta`, `ReflectionReport`, and `ACETConfig`. |
 | `acet.core.interfaces` | Abstract base classes for generators, reflectors, curators, storage backends, and embedding providers. |
 | `acet.core.budget` | `TokenBudgetManager` for counting tokens and packing deltas. |
 
@@ -26,13 +26,13 @@ ContextDelta(
 )
 ```
 
-Represents a single actionable insight. Deltas flow through the lifecycle `STAGED → ACTIVE → ARCHIVED`.
+Represents a single actionable insight. Deltas flow through the lifecycle `STAGED -> ACTIVE -> ARCHIVED`.
 
 ## Engine
 
 | Object | Description |
 | --- | --- |
-| `acet.engine.ACETEngine` | Orchestrates generator → reflector → curator → storage → ranker. |
+| `acet.engine.ACETEngine` | Orchestrates generator -> reflector -> curator -> storage -> ranker. |
 | `ACETEngine.run_offline_adaptation(...)` | Bulk-train from labelled transcripts. |
 | `ACETEngine.run_online_adaptation(...)` | Handle a single live request. |
 | `ACETEngine.ingest_interaction(...)` | Persist an externally generated interaction (useful for LangChain memory). |
@@ -72,7 +72,8 @@ Each provider records model usage metadata and exposes `count_tokens` for budget
 
 ## Integrations & Agents
 
-- `acet.integrations.ACTMemory` – LangChain-compatible memory component.  
+- `acet.integrations.ACETMemory` – LangChain-compatible memory component.  
 - `acet.agents.react.ReActAgent` – Async ReAct loop with tool support.  
 
 See {doc}`../guides/integrations` for usage guidance.
+

@@ -1,4 +1,4 @@
-"""Abstract interfaces that define ACT toolkit components."""
+"""Abstract interfaces that define ACET toolkit components."""
 
 from __future__ import annotations
 
@@ -122,3 +122,4 @@ class EmbeddingProvider(ABC):
     @abstractmethod
     def similarity(self, emb1: List[float], emb2: List[float]) -> float:
         """Compute similarity between two embeddings."""
+

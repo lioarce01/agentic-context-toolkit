@@ -1,4 +1,4 @@
-"""Storage backend implementations for the ACT toolkit."""
+"""Storage backend implementations for the ACET toolkit."""
 
 from .memory import MemoryBackend
 from .postgres import PostgresBackend
@@ -9,3 +9,4 @@ __all__ = [
     "SQLiteBackend",
     "PostgresBackend",
 ]
+

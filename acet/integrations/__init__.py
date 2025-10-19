@@ -1,5 +1,6 @@
-"""Integration helpers for ACT."""
+"""Integration helpers for ACET."""
 
-from .langchain import ACTMemory
+from .langchain import ACETMemory
 
-__all__ = ["ACTMemory"]
+__all__ = ["ACETMemory"]
+

@@ -14,9 +14,9 @@ from acet.core.models import ContextDelta, DeltaStatus
 
 
 class SQLiteBackend(StorageBackend):
-    """SQLite-based storage backend for ACT context deltas."""
+    """SQLite-based storage backend for ACET context deltas."""
 
-    def __init__(self, db_path: str = "ACT_deltas.db") -> None:
+    def __init__(self, db_path: str = "ACET_deltas.db") -> None:
         self.db_path = Path(db_path)
         self._init_db()
 
@@ -62,13 +62,13 @@ class SQLiteBackend(StorageBackend):
 
     async def save_delta(self, delta: ContextDelta) -> None:
         payload = self._serialize_delta(delta)
-        plACTholders = ", ".join("?" for _ in payload)
+        placeholders = ", ".join("?" for _ in payload)
         columns = ", ".join(payload.keys())
         values = list(payload.values())
 
         statement = f"""
             INSERT INTO deltas ({columns})
-            VALUES ({plACTholders})
+            VALUES ({placeholders})
             ON CONFLICT(id) DO UPDATE SET
                 topic=excluded.topic,
                 guideline=excluded.guideline,
@@ -98,11 +98,11 @@ class SQLiteBackend(StorageBackend):
 
         payloads = [self._serialize_delta(delta) for delta in deltas]
         columns = ", ".join(payloads[0].keys())
-        plACTholders = ", ".join("?" for _ in payloads[0])
+        placeholders = ", ".join("?" for _ in payloads[0])
 
         statement = f"""
             INSERT INTO deltas ({columns})
-            VALUES ({plACTholders})
+            VALUES ({placeholders})
             ON CONFLICT(id) DO UPDATE SET
                 topic=excluded.topic,
                 guideline=excluded.guideline,
@@ -252,3 +252,4 @@ class SQLiteBackend(StorageBackend):
             updated_at=datetime.fromisoformat(updated_at),
             embedding=embedding,
         )
+

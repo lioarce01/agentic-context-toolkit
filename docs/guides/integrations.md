@@ -1,20 +1,23 @@
 # Integrations
 
-ACT exposes integration points so you can drop the toolkit into existing agent stacks.
+ACET exposes integration points so you can drop the toolkit into existing agent stacks.
+
+In the snippets below, assume `acet_engine` is an instance of `ACETEngine`.
+
 
 ## LangChain Memory
 
-`acet.integrations.ACTMemory` implements LangChain’s `BaseMemory` API. Attach it to any LCEL chain to inject ACT context and automatically feed interaction transcripts back into the engine.
+`acet.integrations.ACETMemory` implements LangChain's `BaseMemory` API. Attach it to any LCEL chain to inject ACET context and automatically feed interaction transcripts back into the engine.
 
 ```python
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from acet.integrations import ACTMemory
+from acet.integrations import ACETMemory
 
-memory = ACTMemory(
-    engine=act_engine,
-    context_key="act_context",
+memory = ACETMemory(
+    engine=acet_engine,
+    context_key="acet_context",
     input_keys=["input"],
     output_key="response",
     top_k=8,
@@ -22,8 +25,8 @@ memory = ACTMemory(
 
 prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", "Use the provided ACT context when responding."),
-        ("system", "{act_context}"),
+        ("system", "Use the provided ACET context when responding."),
+        ("system", "{acet_context}"),
         ("user", "{input}"),
     ]
 )
@@ -31,7 +34,7 @@ prompt = ChatPromptTemplate.from_messages(
 chain = prompt | ChatOpenAI(model="gpt-4o-mini")  # any LangChain-compatible LLM
 ```
 
-Whenever the chain is called, ACTMemory:
+Whenever the chain is called, ACETMemory:
 
 1. Pulls the top-`k` relevant context deltas from the engine.
 2. Formats them as bullet points (`acet.core.budget.TokenBudgetManager`).
@@ -49,7 +52,7 @@ Whenever the chain is called, ACTMemory:
 
 ```python
 agent = ReActAgent(
-    engine=act_engine,
+    engine=acet_engine,
     llm=OpenAIProvider(model="gpt-4o"),
     tools=[
         Tool(
@@ -70,6 +73,8 @@ The agent returns the final answer, metadata describing each reasoning step, and
 ## Custom Integrations
 
 - Implement the abstract interfaces in `acet.core.interfaces` to integrate bespoke generators, reflectors, curators, or storage layers.  
-- Wrap ACT inside other orchestration frameworks (Haystack, LlamaIndex, semantic kernel) by modelling either `ACETEngine.run_online_adaptation` or `ACETEngine.ingest_interaction` as a callback step.
+- Wrap ACET inside other orchestration frameworks (Haystack, LlamaIndex, semantic kernel) by modelling either `ACETEngine.run_online_adaptation` or `ACETEngine.ingest_interaction` as a callback step.
 
 Refer to {doc}`../examples/index` for runnable scripts that showcase these integrations end-to-end.
+
+

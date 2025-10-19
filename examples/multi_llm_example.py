@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from acet import ACETEngine, ACTConfig, LLMGenerator, StandardCurator
+from acet import ACETConfig, ACETEngine, LLMGenerator, StandardCurator
 from acet.core.interfaces import EmbeddingProvider, Reflector
 from acet.core.models import ReflectionReport
 from acet.llm.base import BaseLLMProvider, LLMResponse, Message
@@ -93,7 +93,7 @@ def build_engine(provider: BaseLLMProvider) -> ACETEngine:
         curator=StandardCurator(embedding_provider=embedding_provider),
         storage=MemoryBackend(),
         ranker=DeltaRanker(embedding_provider),
-        config=ACTConfig(reflection_sample_rate=0.0),  # disable reflection for demo purposes
+        config=ACETConfig(reflection_sample_rate=0.0),  # disable reflection for demo purposes
     )
 
 

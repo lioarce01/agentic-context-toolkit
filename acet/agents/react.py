@@ -36,7 +36,7 @@ class _ParsedStep:
 
 
 class ReActAgent:
-    """Async ReAct loop that leverages ACT-provided context and tooling."""
+    """Async ReAct loop that leverages ACET-provided context and tooling."""
 
     THOUGHT_PREFIX = "Thought:"
     ACTION_PREFIX = "Action:"
@@ -196,3 +196,4 @@ class ReActAgent:
             elif stripped.startswith(self.THOUGHT_PREFIX):
                 parsed.thought = stripped[len(self.THOUGHT_PREFIX) :].strip()
         return parsed
+

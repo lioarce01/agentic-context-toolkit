@@ -1,4 +1,4 @@
-"""Pydantic models used throughout the ACT toolkit."""
+"""Pydantic models used throughout the ACET toolkit."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class DeltaStatus(str, Enum):
 
 
 class ContextDelta(BaseModel):
-    """Atomic unit of learned context captured by ACT."""
+    """Atomic unit of learned context captured by ACET."""
 
     id: str = Field(
         default_factory=lambda: str(uuid.uuid4()),
@@ -148,8 +148,8 @@ class ReflectionReport(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
-class ACTConfig(BaseModel):
-    """Runtime configuration for the ACT engine."""
+class ACETConfig(BaseModel):
+    """Runtime configuration for the ACET engine."""
 
     token_budget: int = Field(
         default=800,
@@ -215,3 +215,4 @@ class ACTConfig(BaseModel):
         le=1.0,
         description="Probability of running reflection on a generation.",
     )
+

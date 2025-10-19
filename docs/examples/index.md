@@ -6,9 +6,9 @@ Hands-on recipes that demonstrate common ACET deployment scenarios.
 
 `examples/simple_rag.py` shows how to:
 
-- Configure an inexpensive echo-style LLM provider.
-- Ingest a small offline dataset to seed context deltas.
-- Serve online queries while the engine reflects/curates in the background.
+- Bootstrap an engine with a toy LLM provider and in-memory storage.
+- Prime the context library with a handful of labelled examples.
+- Answer a live query while reflection + curation refine the playbook.
 
 Run it with:
 
@@ -16,18 +16,20 @@ Run it with:
 python examples/simple_rag.py
 ```
 
+Read through the script for guidance on substituting a real LLM provider, persistent storage, and stronger embedding model.
+
 ## Multi-LLM Strategy
 
-`examples/multi_llm_example.py` demonstrates how to route between multiple providers (OpenAI, Anthropic, LiteLLM/Ollama) while reusing the same ACT engine and storage backend.
+`examples/multi_llm_example.py` demonstrates how to route between multiple providers (OpenAI, Anthropic, LiteLLM/Ollama) while reusing the same ACET engine and storage backend.
 
 It highlights:
 
 - Creating provider instances with shared defaults.
-- Using ACT’s ranker and curator across heterogeneous models.
+- Reusing ACET's ranker and curator across heterogeneous models.
 - Collecting telemetry (token budgets, curated deltas) for each provider.
 
 ```bash
 python examples/multi_llm_example.py
 ```
 
-Both scripts are self-contained and rely only on the dependencies listed in `requirements.txt`. Review them as a starting point for production integrations.
+Both scripts are self-contained and rely only on the dependencies listed in `requirements.txt`. Use them as a starting point before wiring ACET into LangChain, LangGraph, or your own orchestration layer.

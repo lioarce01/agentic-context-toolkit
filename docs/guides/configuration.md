@@ -1,15 +1,15 @@
 # Configuration
 
-ACT is modular by design. You can swap LLM providers, storage backends, embedding sources, and curation policies without touching the orchestration loop. This guide explains the core configuration objects and how to assemble a working pipeline.
+ACET is modular by design. You can swap LLM providers, storage backends, embedding sources, and curation policies without touching the orchestration loop. This guide explains the core configuration objects and how to assemble a working pipeline.
 
-## Core Settings (`ACTConfig`)
+## Core Settings (`ACETConfig`)
 
-`ACTConfig` centralises all knobs that affect token budgets, batching, ranking, and reflection behaviour.
+`ACETConfig` centralises all knobs that affect token budgets, batching, ranking, and reflection behaviour.
 
 ```python
-from acet.core.models import ACTConfig
+from acet.core.models import ACETConfig
 
-config = ACTConfig(
+config = ACETConfig(
     token_budget=800,
     batch_size=2,
     max_epochs=3,
@@ -43,7 +43,7 @@ The budget manager automatically falls back to the `cl100k_base` encoding when a
 
 ## Storage Backends
 
-ACT ships with three built-in implementations of `StorageBackend`:
+ACET ships with three built-in implementations of `StorageBackend`:
 
 | Backend | Module | When to use |
 | --- | --- | --- |
@@ -97,6 +97,6 @@ structlog.configure(
 )
 ```
 
-With this configuration, ACT emits structured JSON logs that capture context token counts, curated delta IDs, reflection stats, and error diagnostics.
+With this configuration, ACET emits structured JSON logs that capture context token counts, curated delta IDs, reflection stats, and error diagnostics.
 
 Continue to {doc}`offline-online-adaptation` to learn how these pieces cooperate inside the adaptation loops.

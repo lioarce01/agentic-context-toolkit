@@ -1,4 +1,4 @@
-"""Core abstractions and models for the ACT toolkit."""
+"""Core abstractions and models for the ACET toolkit."""
 
 from .budget import TokenBudgetManager
 from .interfaces import (
@@ -8,10 +8,10 @@ from .interfaces import (
     Reflector,
     StorageBackend,
 )
-from .models import ACTConfig, ContextDelta, DeltaStatus, ReflectionReport
+from .models import ACETConfig, ContextDelta, DeltaStatus, ReflectionReport
 
 __all__ = [
-    "ACTConfig",
+    "ACETConfig",
     "ContextDelta",
     "DeltaStatus",
     "ReflectionReport",
@@ -22,3 +22,4 @@ __all__ = [
     "StorageBackend",
     "EmbeddingProvider",
 ]
+

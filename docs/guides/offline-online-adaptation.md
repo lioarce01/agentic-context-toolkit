@@ -1,6 +1,6 @@
 # Offline & Online Adaptation
 
-ACT supports two complementary workflows:
+ACET supports two complementary workflows:
 
 1. **Offline adaptation** – digest labelled transcripts or transcripts with ground-truth answers to bootstrap your context delta library.
 2. **Online adaptation** – learn continuously from live user interactions.
@@ -32,7 +32,7 @@ This loop is intentionally deterministic once the random seed for reflection sam
 
 ## Online Adaptation Pipeline
 
-Online adaptation is designed for real-time usage. It loads the most relevant deltas for the incoming query, injects them into the generator prompt, and then decides whether to reflect based on `ACTConfig.reflection_sample_rate`.
+Online adaptation is designed for real-time usage. It loads the most relevant deltas for the incoming query, injects them into the generator prompt, and then decides whether to reflect based on `ACETConfig.reflection_sample_rate`.
 
 ```python
 result = await engine.run_online_adaptation(
@@ -52,11 +52,11 @@ Important outputs in the `result` dictionary:
 - `metadata["context_tokens"]` – tokens consumed by the context bullets.
 - `created_deltas` – any new context deltas accepted by the curator.
 
-If `update_context=False`, ACT still returns a generation but skips reflection+curation. This is useful when operating in evaluation mode.
+If `update_context=False`, ACET still returns a generation but skips reflection+curation. This is useful when operating in evaluation mode.
 
 ## Controlling Reflection Frequency
 
-Reflection is powerful but can be expensive. Tune `ACTConfig.reflection_sample_rate` to balance freshness and cost:
+Reflection is powerful but can be expensive. Tune `ACETConfig.reflection_sample_rate` to balance freshness and cost:
 
 - Set to `0.0` to disable reflection entirely.
 - Set to `1.0` to always reflect (recommended for offline fine-tuning data).
@@ -74,4 +74,4 @@ Track the following runtime metrics:
 
 Structured logs from `structlog` include these counts, making it easy to ship them to your observability stack.
 
-Continue to {doc}`integrations` to see how ACT plugs into LangChain and the bundled ReAct agent.
+Continue to {doc}`integrations` to see how ACET plugs into LangChain and the bundled ReAct agent.
