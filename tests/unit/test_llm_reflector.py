@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import deque
-from typing import Any, Dict, List
+from typing import Any, Deque, Dict, List
 
 import pytest
 
@@ -11,13 +11,15 @@ from acet.core.models import ReflectionReport
 from acet.llm.base import BaseLLMProvider, LLMResponse, Message
 from acet.reflectors.llm import LLMReflector
 
+ResponseLike = LLMResponse | Exception
+
 
 class _StubLLM(BaseLLMProvider):
-    def __init__(self, responses: List[Any]) -> None:
-        self.responses = deque(responses)
+    def __init__(self, responses: List[ResponseLike]) -> None:
+        self.responses: Deque[ResponseLike] = deque(responses)
         self.calls: List[Dict[str, Any]] = []
 
-    async def complete(self, messages: List[Message], **kwargs: Any) -> LLMResponse:  # type: ignore[override]
+    async def complete(self, messages: List[Message], **kwargs: Any) -> LLMResponse:
         self.calls.append({"messages": messages, "kwargs": kwargs})
         outcome = self.responses.popleft()
         if isinstance(outcome, Exception):
@@ -56,10 +58,12 @@ async def test_reflect_parses_json_response() -> None:
 
 @pytest.mark.asyncio
 async def test_reflect_retries_without_response_format_on_error() -> None:
-    llm = _StubLLM([
-        RuntimeError("bad json mode"),
-        _response("```json\n{\"proposed_insights\": []}\n```"),
-    ])
+    llm = _StubLLM(
+        [
+            RuntimeError("bad json mode"),
+            _response("```json\n{\"proposed_insights\": []}\n```"),
+        ]
+    )
     reflector = LLMReflector(llm)
 
     report = await reflector.reflect(query="Q", answer="A", evidence=[], context=[])
@@ -71,10 +75,12 @@ async def test_reflect_retries_without_response_format_on_error() -> None:
 
 @pytest.mark.asyncio
 async def test_refine_stops_on_invalid_json() -> None:
-    llm = _StubLLM([
-        _response('{"issues": [{"type": "gap", "explanation": "Fix", "severity": 3}]}'),
-        _response("not json"),
-    ])
+    llm = _StubLLM(
+        [
+            _response('{"issues": [{"type": "gap", "explanation": "Fix", "severity": 3}]}'),
+            _response("not json"),
+        ]
+    )
     reflector = LLMReflector(llm)
 
     base_report = ReflectionReport(question="Q", answer="A")

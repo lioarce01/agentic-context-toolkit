@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any, List
+
 import pytest
 
 from acet.generators.llm import LLMGenerator
@@ -10,10 +12,10 @@ from acet.llm.base import BaseLLMProvider, LLMResponse, Message
 
 class _StubLLM(BaseLLMProvider):
     def __init__(self) -> None:
-        self.captured_messages: list[Message] = []
+        self.captured_messages: List[Message] = []
         self._model = "stub-model"
 
-    async def complete(self, messages: list[Message], **kwargs: object) -> LLMResponse:  # type: ignore[override]
+    async def complete(self, messages: List[Message], **kwargs: Any) -> LLMResponse:
         self.captured_messages = messages
         return LLMResponse(content="answer", model=self._model, usage={"prompt_tokens": 5})
 

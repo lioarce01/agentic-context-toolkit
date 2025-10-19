@@ -7,7 +7,7 @@ import json
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, AsyncIterator, Dict, List, Mapping, Optional
+from typing import Any, AsyncIterator, Dict, List, Mapping, Optional, cast
 
 import aiosqlite
 
@@ -98,7 +98,7 @@ class SQLiteBackend(StorageBackend):
         async with self._connect() as conn:
             cursor = await conn.execute("SELECT * FROM deltas WHERE id = ?", (delta_id,))
             row = await cursor.fetchone()
-        return self._deserialize_row(row) if row else None
+        return self._deserialize_row(cast(Mapping[str, Any], row)) if row else None
 
     async def query_deltas(
         self,
@@ -132,7 +132,7 @@ class SQLiteBackend(StorageBackend):
             cursor = await conn.execute(query, tuple(parameters))
             rows = await cursor.fetchall()
 
-        return [self._deserialize_row(row) for row in rows]
+        return [self._deserialize_row(cast(Mapping[str, Any], row)) for row in rows]
 
     async def update_delta(self, delta: ContextDelta) -> None:
         await self.save_delta(delta)

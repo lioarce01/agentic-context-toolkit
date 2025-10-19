@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from acet.core.models import ContextDelta, DeltaStatus
@@ -9,7 +11,7 @@ from acet.storage.sqlite import SQLiteBackend
 
 
 @pytest.mark.asyncio
-async def test_sqlite_backend_crud_flow(tmp_path) -> None:
+async def test_sqlite_backend_crud_flow(tmp_path: Path) -> None:
     db_path = tmp_path / "test_deltas.db"
     backend = SQLiteBackend(str(db_path))
 

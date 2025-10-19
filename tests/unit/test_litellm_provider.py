@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import types
-from typing import Any, Dict
+from typing import Any, Callable, Dict, Optional
 
 import pytest
 
@@ -27,11 +27,15 @@ class _FakeResponse:
 class _FakeLiteLLM:
     def __init__(self) -> None:
         self.captured_kwargs: Dict[str, Any] = {}
-        self.token_counter = lambda model, text: len(text)  # type: ignore[arg-type]
+        self.token_counter: Optional[Callable[[str, str], int]] = self._count
 
     async def acompletion(self, **kwargs: Any) -> Any:
         self.captured_kwargs = kwargs
         return _FakeResponse("lite llm reply")
+
+    @staticmethod
+    def _count(model: str, text: str) -> int:
+        return len(text)
 
 
 @pytest.fixture
@@ -55,7 +59,7 @@ async def test_litellm_provider_complete_uses_router(_patched_litellm: _FakeLite
 
 def test_litellm_count_tokens_falls_back_without_counter(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _FakeLiteLLM()
-    fake.token_counter = None  # type: ignore[assignment]
+    fake.token_counter = None
     monkeypatch.setattr("acet.llm.providers.litellm_provider.litellm_module", fake)
     monkeypatch.setattr("acet.llm.providers.litellm_provider.LITELLM_IMPORT_ERROR", None)
 
