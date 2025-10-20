@@ -29,10 +29,22 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          pytest tests/unit tests/integration --cov=ace --cov-report=term-missing
+          pytest tests/unit tests/integration --cov=acet --cov-report=term-missing --cov-report=html
+      - name: Generate benchmark plots
+        run: |
+          source .venv/bin/activate
+          python benchmarks/delta_retrieval.py --iterations 30 --plot benchmarks/artifacts/delta_latency.png
+          python benchmarks/storage_throughput.py --backend all --iterations 30 --plot benchmarks/artifacts/storage_latency.png
+          python benchmarks/curator_throughput.py --proposals 300 --duplicate-ratio 0.3 --iterations 20 --plot benchmarks/artifacts/curator_latency.png
       - name: Upload coverage artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html
           path: htmlcov
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-plots
+          path: benchmarks/artifacts
