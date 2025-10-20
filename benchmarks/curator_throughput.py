@@ -15,20 +15,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from acet.core.interfaces import EmbeddingProvider  # noqa: E402
 from acet.core.models import ContextDelta, ReflectionReport  # noqa: E402
 from acet.curators.standard import StandardCurator  # noqa: E402
 
 
-class StubEmbeddingProvider:
+class StubEmbeddingProvider(EmbeddingProvider):
     """Inexpensive embedding provider used to keep runs deterministic."""
 
     async def embed(self, text: str) -> List[float]:
         return [float(ord(ch) % 101) / 50.0 for ch in text[:32]]
 
-    async def embed_batch(self, texts: Sequence[str]) -> List[List[float]]:
+    async def embed_batch(self, texts: List[str]) -> List[List[float]]:
         return [await self.embed(text) for text in texts]
 
-    def similarity(self, emb1: Sequence[float], emb2: Sequence[float]) -> float:
+    def similarity(self, emb1: List[float], emb2: List[float]) -> float:
         if not emb1 or not emb2:
             return 0.0
         dot = sum(a * b for a, b in zip(emb1, emb2, strict=False))
@@ -36,7 +37,7 @@ class StubEmbeddingProvider:
         norm2 = sum(b * b for b in emb2) ** 0.5
         if norm1 == 0.0 or norm2 == 0.0:
             return 0.0
-        return dot / (norm1 * norm2)
+        return float(dot / (norm1 * norm2))
 
 
 def build_existing(count: int) -> List[ContextDelta]:
@@ -129,7 +130,7 @@ def maybe_plot(
     subtitle: str | None = None,
 ) -> None:
     try:
-        import matplotlib.pyplot as plt  # type: ignore[import-not-found]
+        import matplotlib.pyplot as plt
     except ImportError as exc:  # pragma: no cover - optional dependency
         raise SystemExit("matplotlib is required for plotting. Install with `pip install matplotlib`.") from exc
 

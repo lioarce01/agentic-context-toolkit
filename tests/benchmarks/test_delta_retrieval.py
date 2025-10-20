@@ -5,13 +5,16 @@ from __future__ import annotations
 import asyncio
 import math
 import random
-from typing import List
+from typing import TYPE_CHECKING, Any, List
 
 import pytest
 
 from acet.core.interfaces import EmbeddingProvider
 from acet.core.models import ContextDelta, DeltaStatus
 from acet.retrieval import DeltaRanker
+
+if TYPE_CHECKING:
+    BenchmarkFixture = Any
 
 
 class StubEmbeddingProvider(EmbeddingProvider):
@@ -57,7 +60,7 @@ def _make_delta(index: int) -> ContextDelta:
 
 
 @pytest.mark.benchmark(group="delta-retrieval")
-def test_delta_ranker_latency_under_budget(benchmark: pytest.BenchmarkFixture) -> None:
+def test_delta_ranker_latency_under_budget(benchmark: BenchmarkFixture) -> None:
     """Ensure ranking stays comfortably within the 100 ms retrieval target."""
     embedding_provider = StubEmbeddingProvider()
     ranker = DeltaRanker(embedding_provider=embedding_provider)

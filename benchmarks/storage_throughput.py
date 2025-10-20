@@ -15,6 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from acet.core.interfaces import StorageBackend  # noqa: E402
 from acet.core.models import ContextDelta, DeltaStatus  # noqa: E402
 from acet.storage.memory import MemoryBackend  # noqa: E402
 from acet.storage.sqlite import SQLiteBackend  # noqa: E402
@@ -36,7 +37,7 @@ def build_deltas(count: int) -> List[ContextDelta]:
     ]
 
 
-def create_backend(name: str, workdir: Path) -> Tuple[object, Callable[[], None]]:
+def create_backend(name: str, workdir: Path) -> Tuple[StorageBackend, Callable[[], None]]:
     if name == "memory":
         return MemoryBackend(), lambda: None
 
@@ -52,7 +53,7 @@ def create_backend(name: str, workdir: Path) -> Tuple[object, Callable[[], None]
     return backend, cleanup
 
 
-async def exercise_backend(backend: object, deltas: List[ContextDelta]) -> None:
+async def exercise_backend(backend: StorageBackend, deltas: List[ContextDelta]) -> None:
     await backend.save_deltas(deltas)
     saved = await backend.query_deltas()
     assert len(saved) == len(deltas)
@@ -104,7 +105,7 @@ def maybe_plot(
     subtitle: str | None = None,
 ) -> None:
     try:
-        import matplotlib.pyplot as plt  # type: ignore[import-not-found]
+        import matplotlib.pyplot as plt
     except ImportError as exc:  # pragma: no cover - optional dependency
         raise SystemExit("matplotlib is required for plotting. Install with `pip install matplotlib`.") from exc
 

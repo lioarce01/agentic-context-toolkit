@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import asyncio
 import uuid
-from typing import List
+from typing import TYPE_CHECKING, Any, List
 
 import pytest
 
+from acet.core.interfaces import EmbeddingProvider
 from acet.core.models import ContextDelta, ReflectionReport
 from acet.curators.standard import StandardCurator
 
+if TYPE_CHECKING:
+    BenchmarkFixture = Any
 
-class StubEmbeddingProvider:
+
+class StubEmbeddingProvider(EmbeddingProvider):
     """Lightweight embedding provider returning deterministic vectors."""
 
     async def embed(self, text: str) -> List[float]:
@@ -29,7 +33,7 @@ class StubEmbeddingProvider:
         norm2 = sum(b * b for b in emb2) ** 0.5
         if norm1 == 0.0 or norm2 == 0.0:
             return 0.0
-        return dot / (norm1 * norm2)
+        return float(dot / (norm1 * norm2))
 
 
 def _build_existing(count: int) -> List[ContextDelta]:
@@ -75,7 +79,7 @@ def _build_report(proposals: int, duplicate_ratio: float = 0.3) -> ReflectionRep
 
 
 @pytest.mark.benchmark(group="curator-throughput")
-def test_curator_dedup_throughput(benchmark: pytest.BenchmarkFixture) -> None:
+def test_curator_dedup_throughput(benchmark: BenchmarkFixture) -> None:
     """Ensure curator handles heavy batches within acceptable latency."""
     existing = _build_existing(150)
     report = _build_report(300)

@@ -39,7 +39,7 @@ class StubEmbeddingProvider(EmbeddingProvider):
         norm2 = math.sqrt(sum(b * b for b in emb2))
         if norm1 == 0.0 or norm2 == 0.0:
             return 0.0
-        return dot / (norm1 * norm2)
+        return float(dot / (norm1 * norm2))
 
     @staticmethod
     def _vectorize(text: str) -> List[float]:
@@ -151,7 +151,7 @@ def _maybe_plot(
     subtitle: str | None = None,
 ) -> None:
     try:
-        import matplotlib.pyplot as plt  # type: ignore[import-not-found]
+        import matplotlib.pyplot as plt
     except ImportError as exc:  # pragma: no cover - optional dependency
         raise SystemExit(
             "matplotlib is required for plotting. Install with `pip install matplotlib`."

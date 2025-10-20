@@ -5,13 +5,17 @@ from __future__ import annotations
 import asyncio
 import uuid
 from pathlib import Path
-from typing import List
+from typing import TYPE_CHECKING, Any, List
 
 import pytest
 
+from acet.core.interfaces import StorageBackend
 from acet.core.models import ContextDelta, DeltaStatus
 from acet.storage.memory import MemoryBackend
 from acet.storage.sqlite import SQLiteBackend
+
+if TYPE_CHECKING:
+    BenchmarkFixture = Any
 
 
 def _generate_deltas(count: int) -> List[ContextDelta]:
@@ -30,10 +34,7 @@ def _generate_deltas(count: int) -> List[ContextDelta]:
     ]
 
 
-async def _exercise_backend(backend: object, deltas: List[ContextDelta]) -> None:
-    assert hasattr(backend, "save_deltas")
-    assert hasattr(backend, "query_deltas")
-
+async def _exercise_backend(backend: StorageBackend, deltas: List[ContextDelta]) -> None:
     await backend.save_deltas(deltas)
     saved = await backend.query_deltas()
     assert len(saved) == len(deltas)
@@ -46,7 +47,7 @@ async def _exercise_backend(backend: object, deltas: List[ContextDelta]) -> None
 @pytest.mark.parametrize("backend_name", ["memory", "sqlite"], ids=["memory", "sqlite"])
 @pytest.mark.benchmark(group="storage-throughput")
 def test_storage_save_query_throughput(
-    benchmark: pytest.BenchmarkFixture,
+    benchmark: BenchmarkFixture,
     backend_name: str,
     tmp_path: Path,
 ) -> None:
@@ -54,6 +55,7 @@ def test_storage_save_query_throughput(
     deltas = _generate_deltas(300)
 
     def _iteration() -> None:
+        backend: StorageBackend
         if backend_name == "memory":
             backend = MemoryBackend()
         else:
