@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "acet"
-version = "1.0.9"
+version = "1.0.10"
 description = "Agentic Context Toolkit: context delta learning for adaptive LLM agents"
 readme = "README.md"
 requires-python = ">=3.12"
