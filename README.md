@@ -1,6 +1,11 @@
-[![CI](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml) [![Docs](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml) ![Publish](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/publish.yml/badge.svg?event=push)
- [![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/acet?period=total&units=NONE&left_color=GRAY&right_color=BRIGHTGREEN&left_text=downloads)](https://pepy.tech/projects/acet)
+[![CI](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml)
+[![Docs](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml/badge.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/docs.yml)
+![Publish](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/publish.yml/badge.svg?event=push)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](https://github.com/lioarce01/agentic-context-toolkit/actions/workflows/ci.yml)
+[![PyPI Downloads](https://pepy.tech/badge/acet)](https://pepy.tech/project/acet)
+[![PyPI Version](https://img.shields.io/pypi/v/acet.svg)](https://pypi.org/project/acet/)
+[![License](https://img.shields.io/github/license/lioarce01/agentic-context-toolkit.svg)](https://github.com/lioarce01/agentic-context-toolkit/blob/main/LICENSE)
+
 # Agentic Context Engineering Toolkit
 
 Research-oriented framework for Agentic Context Engineering. It captures, ranks, and reuses "context deltas" from LLM interactions so agents adapt without retraining, following the methodology described in [Agentic Context Engineering Framework](https://www.arxiv.org/abs/2510.04618).
